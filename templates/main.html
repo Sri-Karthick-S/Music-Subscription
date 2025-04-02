@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Subscription Service</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='mainstyle.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Music Subscription Service</h1>
+            <div class="user-area">
+                <span class="user-name">Welcome, {{user_name}}</span>
+                <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+            </div>
+        </header>
+
+        <!-- Subscription Area -->
+        <section class="subscription-area">
+            <h2 class="subscription-title">Your Subscriptions</h2>
+
+            {% if subscriptions %}
+            <div class="subscription-list">
+                {% for song in subscriptions %}
+                <div class="music-card">
+                    <div class="music-info">
+                        <h3>{{ song.title }}</h3>
+                        <p><strong>Artist:</strong> {{ song.artist }}</p>
+                        <p><strong>Album:</strong> {{ song.album }}</p>
+                        <p><strong>Year:</strong> {{ song.year }}</p>
+                    </div>
+                    <img src="{{ song.s3_url }}" alt="Artist Image" class="artist-image">
+                    <form method="POST" action="{{ url_for('remove') }}">
+                        <input type="hidden" name="song_id" value="{{ song.song_id }}">
+                        <button class="remove-btn">Remove</button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="subscription-empty">
+                You haven't subscribed to any songs yet. Use the search below to find and subscribe to music.
+            </div>
+            {% endif %}
+        </section>
+
+        <!-- Query Area -->
+        <section class="query-area">
+            <h2>Find Music</h2>
+            <form class="query-form" method="POST" action="{{ url_for('query') }}">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" placeholder="Enter song title">
+                </div>
+                <div class="form-group">
+                    <label for="artist">Artist</label>
+                    <input type="text" id="artist" name="artist" placeholder="Enter artist name">
+                </div>
+                <div class="form-group">
+                    <label for="album">Album</label>
+                    <input type="text" id="album" name="album" placeholder="Enter album name">
+                </div>
+                <div class="form-group">
+                    <label for="year">Year</label>
+                    <input type="text" id="year" name="year" placeholder="Enter release year">
+                </div>
+                <button type="submit" class="query-btn">Search</button>
+            </form>
+
+            <div class="query-results">
+                {% if results is not defined %}
+                <div class="no-result">
+                    No result is retrieved. Please query again.
+                </div>
+                {% elif results|length == 0 %}
+                <div class="no-result">
+                    No result is retrieved. Please query again.
+                </div>
+                {% else %}
+                <div class="results-list">
+                    {% for song in results %}
+                    <div class="music-card">
+                        <div class="music-info">
+                            <h3>{{ song.title }}</h3>
+                            <p><strong>Artist:</strong> {{ song.artist }}</p>
+                            <p><strong>Album:</strong> {{ song.album }}</p>
+                            <p><strong>Year:</strong> {{ song.year }}</p>
+                        </div>
+                        <img src="{{ song.s3_url }}" alt="Artist Image" class="artist-image">
+                        <form method="POST" action="{{ url_for('subscribe') }}">
+                            <input type="hidden" name="song_id" value="{{ song.song_id }}">
+                            <input type="hidden" name="title" value="{{ song.title }}">
+                            <input type="hidden" name="artist" value="{{ song.artist }}">
+                            <input type="hidden" name="album" value="{{ song.album }}">
+                            <input type="hidden" name="year" value="{{ song.year }}">
+                            <input type="hidden" name="s3_url" value="{{ song.s3_url }}">
+                            <button class="subscribe-btn">Subscribe</button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+</body>
+</html>

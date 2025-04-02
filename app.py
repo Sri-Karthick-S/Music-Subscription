@@ -3,7 +3,7 @@ import boto3
 from aws.dynamodb_utils import check_login, register_user
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key'
+app.secret_key = 'Zxj4fKDmsLK47kf2imwJ3yF9'
 
 @app.route('/')
 def home():

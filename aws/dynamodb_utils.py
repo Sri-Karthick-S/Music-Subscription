@@ -1,6 +1,6 @@
 import boto3
 
-dynamodb = boto3.resource('dynamodb')
+dynamodb = boto3.resource('dynamodb',  region_name='us-east-1')
 login_table = dynamodb.Table('login')
 
 def check_login(email, password):
