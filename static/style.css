@@ -1,0 +1,131 @@
+body {
+    background-color: #edeaff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .login-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .login-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    text-align: center;
+  }
+  
+  .login-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #4c3cb1;
+    margin-bottom: 1.5rem;
+  }
+  
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  
+  .login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #7a5df1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 20px;
+  }
+  
+  .login-btn:hover {
+    background-color: #5a40d0;
+  }
+  
+  .register-link {
+    margin-top: 16px;
+    font-size: 14px;
+  }
+  
+  .register-link a {
+    color: #6c43f2;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .login-form {
+    text-align: left;
+  }
+  
+  .login-form label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 6px;
+    margin-top: 16px;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .login-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 4px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+
+  .flash-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+  }
+  
+  .flash {
+    padding: 12px 20px;
+    border-radius: 8px;
+    width: 350px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+  }
+  
+  .flash-success {
+    background-color: #d4f6e6;
+    color: #256b43;
+    border: 1px solid #74ddae;
+  }
+  
+  .flash-danger,
+  .flash-error {
+    background-color: #ffe0e0;
+    color: #c9302c;
+    border: 1px solid #f5a4a4;
+  }
+  
+  .flash-warning {
+    background-color: #fff4d6;
+    color: #8a6d3b;
+    border: 1px solid #f2d095;
+  }
+  
+  
+  
