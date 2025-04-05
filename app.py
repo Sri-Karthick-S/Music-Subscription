@@ -9,20 +9,41 @@ app.secret_key = 'your-secret-key'
 def home():
     return redirect(url_for('login'))
 
+
+
+
+
+
+
+
+
+
+
+import requests  # ✅ Make sure this is at the top of your app.py
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        user = check_login(email, password)
-        if user:
+
+        
+        url = "https://m0uoz68yl6.execute-api.us-east-1.amazonaws.com/dev/login"
+        response = requests.get(url, params={"email": email, "password": password})
+
+    
+        if response.status_code == 200:
+            user = response.json()
             session['user_name'] = user['user_name']
             return redirect(url_for('main'))
         else:
-            flash("Email or password is invalid", "danger")
+            flash("Invalid email or password")
+            return redirect(url_for('login'))
+
     return render_template('login.html')
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
+
 def register():
     if request.method == 'POST':
         email = request.form['email']
@@ -48,4 +69,4 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='127.0.0.1', port=5050, debug=True)
