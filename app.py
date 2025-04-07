@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-import boto3
 from aws.dynamodb_utils import check_login, register_user
 
 app = Flask(__name__)
@@ -9,41 +8,21 @@ app.secret_key = 'your-secret-key'
 def home():
     return redirect(url_for('login'))
 
-
-
-
-
-
-
-
-
-
-
-import requests  # ✅ Make sure this is at the top of your app.py
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-
-        
-        url = "https://m0uoz68yl6.execute-api.us-east-1.amazonaws.com/dev/login"
-        response = requests.get(url, params={"email": email, "password": password})
-
-    
-        if response.status_code == 200:
-            user = response.json()
+        user = check_login(email, password)  # ✅ Using boto3-based function
+        if user:
             session['user_name'] = user['user_name']
             return redirect(url_for('main'))
         else:
             flash("Invalid email or password")
             return redirect(url_for('login'))
-
     return render_template('login.html')
 
-@app.route('/login', methods=['GET', 'POST'])
-
+@app.route('/register', methods=['GET', 'POST'])  # ✅ Fixed route
 def register():
     if request.method == 'POST':
         email = request.form['email']
