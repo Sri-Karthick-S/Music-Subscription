@@ -59,7 +59,7 @@ class MusicDataLoader:
 if __name__ == '__main__':
 
     bucket_name = 's4040536artistimages'
-    json_file = '../2025a1.json'
+    json_file = '2025a1.json'
 
     loader = MusicDataLoader(bucket_name)
     songs = loader.load_data_from_json(json_file)

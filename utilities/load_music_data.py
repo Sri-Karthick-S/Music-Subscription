@@ -31,7 +31,10 @@ class MusicDataLoader:
         try:
             with self.table.batch_writer() as batch:
                 for song in song_data:
+                    # Composite sort key using title and album
                     title_album = f"{song['title']}#{song['album']}"  # Composite sort key
+                    # Compute the S3 key using artist and title with spaces removed or replaced by underscores
+                    s3_key = f"{song['artist'].replace(' ', '_')}/{song['title'].replace(' ', '_')}.jpg"
 
                     batch.put_item(
                         Item={
@@ -39,11 +42,11 @@ class MusicDataLoader:
                             'title_album': title_album,          # Sort Key
                             'title': song['title'],
                             'album': song['album'],
-                            'year': int(song['year']),
-                            'image_url': song['img_url']
+                            'year': song['year'],
+                            's3_key': s3_key     # Store the computed S3 key
                         }
                     )
-                    logger.info(f"📦 Batched: {song['title']} by {song['artist']}")
+                    logger.info(f" Batched: {song['title']} by {song['artist']}")
         except ClientError as err:
             logger.error(
                 "Error: Couldn't batch insert songs. Here's why: %s: %s",

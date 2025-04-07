@@ -1,14 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="login-wrapper">
+<div class="login-wrapper login-bg">
   <div class="card login-card">
     <h2 class="login-title">Login</h2>
+
+    <!-- Option A: Place flash messages inside the card -->
+    <div class="flash-container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      {% for category, message in messages %}
+      <div class="flash flash-{{ category }}">{{ message }}</div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+    </div>
+
     <form method="POST" class="login-form">
       <label for="email">Email</label>
       <input type="email" name="email" placeholder="Enter your email" required>
 
       <label for="password">Password</label>
-      <input type="password" name="password" placeholder="Enter your password" required><br>
+      <input type="password" name="password" placeholder="Enter your password" required>
 
       <button type="submit" class="login-btn">Login</button>
     </form>

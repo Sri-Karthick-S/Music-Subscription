@@ -1,213 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Subscription Service</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
-        }
+{% extends 'base.html' %}
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #ddd;
-        }
-
-        h1 {
-            margin: 0;
-            color: #1db954;
-        }
-
-        .user-area {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-name {
-            margin-right: 20px;
-            font-weight: bold;
-        }
-
-        .logout {
-            text-decoration: none;
-            color: #777;
-            font-size: 14px;
-        }
-
-        .logout:hover {
-            text-decoration: underline;
-        }
-
-        .subscription-area {
-            margin-top: 30px;
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .subscription-title {
-            margin-top: 0;
-            color: #333;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        .subscription-empty {
-            text-align: center;
-            padding: 40px 0;
-            color: #999;
-            font-style: italic;
-        }
-
-        .subscription-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .music-card {
-            border: 1px solid #eee;
-            border-radius: 6px;
-            padding: 15px;
-            transition: transform 0.2s ease;
-        }
-
-        .music-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .music-info h3 {
-            margin-top: 0;
-            margin-bottom: 5px;
-            font-size: 16px;
-            color: #333;
-        }
-
-        .music-info p {
-            margin: 2px 0;
-            color: #666;
-            font-size: 14px;
-        }
-
-        .artist-image {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 4px;
-            margin: 10px 0;
-        }
-
-        .remove-btn, .subscribe-btn {
-            background-color: #1db954;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: bold;
-            transition: background-color 0.2s ease;
-        }
-
-        .remove-btn {
-            background-color: #e74c3c;
-        }
-
-        .remove-btn:hover {
-            background-color: #c0392b;
-        }
-
-        .subscribe-btn:hover {
-            background-color: #169c45;
-        }
-
-        .query-area {
-            margin-top: 30px;
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .query-form {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 10px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .query-btn {
-            grid-column: span 2;
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.2s ease;
-        }
-
-        .query-btn:hover {
-            background-color: #555;
-        }
-
-        .query-results {
-            margin-top: 20px;
-        }
-
-        .no-result {
-            text-align: center;
-            padding: 20px;
-            color: #e74c3c;
-            font-style: italic;
-        }
-
-        .results-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-    </style>
-</head>
-<body>
+{% block content %}
 <div class="container">
     <header>
-        <h1>Music Subscription Service</h1>
+        <h1>Melodify Music Subscription</h1>
         <div class="user-area">
             <span class="user-name">Welcome, {{ user_name }}</span>
             <a href="{{ url_for('logout') }}" class="logout">Logout</a>
@@ -228,7 +24,10 @@
                     <p><strong>Year:</strong> {{ sub.year }}</p>
                 </div>
                 <img src="{{ sub.image_url }}" alt="Artist Image" class="artist-image">
-                <button class="remove-btn">Remove</button>
+                <form action="{{ url_for('remove_subscription_route') }}" method="post">
+                    <input type="hidden" name="title_album" value="{{ sub.title_album }}">
+                    <button type="submit" class="remove-btn">Remove</button>
+                </form>
             </div>
             {% endfor %}
         </div>
@@ -237,11 +36,21 @@
             You haven't subscribed to any songs yet. Use the search below to find and subscribe to music.
         </div>
         {% endif %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-container">
+            {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
     </section>
 
     <!-- Query Area -->
     <section class="query-area">
-        <h2>Find Music</h2>
+        <h2 class="subscription-title">Find Music</h2>
         <form class="query-form" method="post" action="{{ url_for('main') }}">
             <div class="form-group">
                 <label for="title">Title</label>
@@ -259,7 +68,7 @@
                 <label for="year">Year</label>
                 <input type="text" id="year" name="year" placeholder="Enter release year">
             </div>
-            <button type="submit" class="query-btn">Search</button>
+            <button type="submit" class="query-btn">Query</button>
         </form>
 
         <div class="query-results">
@@ -274,17 +83,32 @@
                         <p><strong>Year:</strong> {{ res.year }}</p>
                     </div>
                     <img src="{{ res.image_url }}" alt="Artist Image" class="artist-image">
-                    <button class="subscribe-btn">Subscribe</button>
+
+                    <!-- Only show the subscribe button if NOT already subscribed -->
+                    {% if not res.subscribed %}
+                    <form action="{{ url_for('subscribe') }}" method="post">
+                        <input type="hidden" name="title_album" value="{{ res.title_album }}">
+                        <input type="hidden" name="title" value="{{ res.title }}">
+                        <input type="hidden" name="artist" value="{{ res.artist }}">
+                        <input type="hidden" name="album" value="{{ res.album }}">
+                        <input type="hidden" name="year" value="{{ res.year }}">
+                        <input type="hidden" name="s3_key" value="{{ res.s3_key }}">
+                        <button type="submit" class="subscribe-btn">Subscribe</button>
+                    </form>
+                    {% else %}
+                    <!-- Already subscribed, no subscribe button needed -->
+                    <p class="already-subscribed-label">Already subscribed</p>
+                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
-            {% else %}
+            {% elif query_performed %}
             <div class="no-result">
                 No result is retrieved. Please query again.
             </div>
             {% endif %}
         </div>
     </section>
+
 </div>
-</body>
-</html>
+{% endblock %}

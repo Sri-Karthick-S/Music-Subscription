@@ -2,7 +2,7 @@ import boto3
 from botocore.exceptions import ClientError
 
 # Define your S3 bucket name (replace with your actual bucket name)
-S3_BUCKET = 'your-music-bucket'
+S3_BUCKET = 's4040536artistimages'
 
 # Initialize S3 client (adjust region if necessary)
 s3_client = boto3.client('s3', region_name='us-east-1')
