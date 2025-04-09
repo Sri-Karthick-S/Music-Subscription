@@ -1,114 +1,96 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="container">
-    <header>
-        <h1>Melodify Music Subscription</h1>
-        <div class="user-area">
-            <span class="user-name">Welcome, {{ user_name }}</span>
-            <a href="{{ url_for('logout') }}" class="logout">Logout</a>
-        </div>
-    </header>
 
-    <!-- Subscription Area -->
-    <section class="subscription-area">
-        <h2 class="subscription-title">Your Subscriptions</h2>
+  <!-- HEADER -->
+  <header class="header-row">
+    <h1>Melodify Music Subscription</h1>
+    <div class="user-area">
+      <span class="user-name">Welcome, {{ user_name }}</span>
+      <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <div class="main-content">
+
+    <!-- LEFT: SUBSCRIPTIONS AREA -->
+    <section class="subscription-section">
+      <h2 class="subscription-title">Your Subscriptions</h2>
+      <div class="subscription-scrollable">
         {% if subscriptions and subscriptions|length > 0 %}
         <div class="subscription-list">
-            {% for sub in subscriptions %}
-            <div class="music-card">
-                <div class="music-info">
-                    <h3>{{ sub.title }}</h3>
-                    <p><strong>Artist:</strong> {{ sub.artist }}</p>
-                    <p><strong>Album:</strong> {{ sub.album }}</p>
-                    <p><strong>Year:</strong> {{ sub.year }}</p>
-                </div>
-                <img src="{{ sub.image_url }}" alt="Artist Image" class="artist-image">
-                <form action="{{ url_for('remove_subscription_route') }}" method="post">
-                    <input type="hidden" name="title_album" value="{{ sub.title_album }}">
-                    <button type="submit" class="remove-btn">Remove</button>
-                </form>
+          {% for sub in subscriptions %}
+          <div class="music-card">
+            <div class="music-info">
+              <h3>{{ sub.title }}</h3>
+              <p><strong>Artist:</strong> {{ sub.artist }}</p>
+              <p><strong>Album:</strong> {{ sub.album }}</p>
+              <p><strong>Year:</strong> {{ sub.year }}</p>
             </div>
-            {% endfor %}
+            <img src="{{ sub.image_url }}" class="artist-image" alt="Artist Image">
+            <form action="{{ url_for('remove_subscription_route') }}" method="post">
+              <input type="hidden" name="title_album" value="{{ sub.title_album }}">
+              <button class="remove-btn">Remove</button>
+            </form>
+          </div>
+          {% endfor %}
         </div>
         {% else %}
-        <div class="subscription-empty">
-            You haven't subscribed to any songs yet. Use the search below to find and subscribe to music.
-        </div>
+        <div class="subscription-empty">No subscriptions yet.</div>
         {% endif %}
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <div class="flash-container">
-            {% for category, message in messages %}
-            <div class="flash flash-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
-
+      </div>
     </section>
 
-    <!-- Query Area -->
-    <section class="query-area">
-        <h2 class="subscription-title">Find Music</h2>
-        <form class="query-form" method="post" action="{{ url_for('main') }}">
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" id="title" name="title" placeholder="Enter song title">
-            </div>
-            <div class="form-group">
-                <label for="artist">Artist</label>
-                <input type="text" id="artist" name="artist" placeholder="Enter artist name">
-            </div>
-            <div class="form-group">
-                <label for="album">Album</label>
-                <input type="text" id="album" name="album" placeholder="Enter album name">
-            </div>
-            <div class="form-group">
-                <label for="year">Year</label>
-                <input type="text" id="year" name="year" placeholder="Enter release year">
-            </div>
-            <button type="submit" class="query-btn">Query</button>
-        </form>
+    <!-- RIGHT: SEARCH + RESULTS -->
+    <section class="query-section">
+      <h2 class="subscription-title">Find Music</h2>
 
-        <div class="query-results">
-            {% if results and results|length > 0 %}
-            <div class="results-list">
-                {% for res in results %}
-                <div class="music-card">
-                    <div class="music-info">
-                        <h3>{{ res.title }}</h3>
-                        <p><strong>Artist:</strong> {{ res.artist }}</p>
-                        <p><strong>Album:</strong> {{ res.album }}</p>
-                        <p><strong>Year:</strong> {{ res.year }}</p>
-                    </div>
-                    <img src="{{ res.image_url }}" alt="Artist Image" class="artist-image">
-
-                    <!-- Only show the subscribe button if NOT already subscribed -->
-                    {% if not res.subscribed %}
-                    <form action="{{ url_for('subscribe') }}" method="post">
-                        <input type="hidden" name="title_album" value="{{ res.title_album }}">
-                        <input type="hidden" name="title" value="{{ res.title }}">
-                        <input type="hidden" name="artist" value="{{ res.artist }}">
-                        <input type="hidden" name="album" value="{{ res.album }}">
-                        <input type="hidden" name="year" value="{{ res.year }}">
-                        <input type="hidden" name="s3_key" value="{{ res.s3_key }}">
-                        <button type="submit" class="subscribe-btn">Subscribe</button>
-                    </form>
-                    {% else %}
-                    <!-- Already subscribed, no subscribe button needed -->
-                    <p class="already-subscribed-label">Already subscribed</p>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
-            {% elif query_performed %}
-            <div class="no-result">
-                No result is retrieved. Please query again.
-            </div>
-            {% endif %}
+      <!-- SEARCH FORM -->
+      <form class="query-form" method="post" action="{{ url_for('main') }}">
+        <div class="form-grid">
+          <input type="text" name="title" placeholder="Title" value="{{ session['last_search']['title'] if session.get('last_search') else '' }}">
+          <input type="text" name="year" placeholder="Year" value="{{ session['last_search']['year'] if session.get('last_search') else '' }}">
+          <input type="text" name="album" placeholder="Album" value="{{ session['last_search']['album'] if session.get('last_search') else '' }}">
+          <input type="text" name="artist" placeholder="Artist" value="{{ session['last_search']['artist'] if session.get('last_search') else '' }}">
         </div>
-    </section>
+        <button type="submit" class="query-btn">Search</button>
+      </form>
 
+      <!-- QUERY RESULTS -->
+      <div class="query-results">
+        {% if results and results|length > 0 %}
+        <div class="results-list">
+          {% for res in results %}
+          <div class="music-card horizontal-card">
+            <div class="music-text">
+              <h3>{{ res.title }}</h3>
+              <p><strong>Artist:</strong> {{ res.artist }}</p>
+              <p><strong>Album:</strong> {{ res.album }}</p>
+              <p><strong>Year:</strong> {{ res.year }}</p>
+              {% if not res.subscribed %}
+              <form action="{{ url_for('subscribe') }}" method="post">
+                <input type="hidden" name="title_album" value="{{ res.title_album }}">
+                <input type="hidden" name="title" value="{{ res.title }}">
+                <input type="hidden" name="artist" value="{{ res.artist }}">
+                <input type="hidden" name="album" value="{{ res.album }}">
+                <input type="hidden" name="year" value="{{ res.year }}">
+                <input type="hidden" name="s3_key" value="{{ res.s3_key }}">
+                <button type="submit" class="subscribe-btn">Subscribe</button>
+              </form>
+              {% else %}
+              <p class="already-subscribed-label">Already subscribed</p>
+              {% endif %}
+            </div>
+            <img src="{{ res.image_url }}" alt="Artist Image" class="artist-image horizontal-img">
+          </div>
+          {% endfor %}
+        </div>
+        {% elif query_performed %}
+        <div class="no-result">No results. Try again.</div>
+        {% endif %}
+      </div>
+    </section>
+  </div>
 </div>
 {% endblock %}

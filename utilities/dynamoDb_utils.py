@@ -62,7 +62,6 @@ def search_music(criteria):
         if value:
             condition = Attr(key).contains(value)
             filter_expression = condition if filter_expression is None else filter_expression & condition
-
     try:
         if filter_expression:
             response = music_table.scan(FilterExpression=filter_expression)
@@ -72,6 +71,7 @@ def search_music(criteria):
     except ClientError as e:
         print("Search error:", e.response['Error']['Message'])
         return []
+
 '''
 def search_music(criteria):
     """
@@ -121,6 +121,7 @@ def get_user_subscriptions(email):
     except ClientError as e:
         print("Error retrieving subscriptions:", e.response['Error']['Message'])
         return []
+    
 
 def subscribe_song(email, song_data):
     """
@@ -144,6 +145,7 @@ def subscribe_song(email, song_data):
         print("Error subscribing song:", e.response['Error']['Message'])
         return False
 
+
 def remove_subscription(email, title_album):
     """Remove a subscription record for the user."""
     try:
@@ -156,4 +158,11 @@ def remove_subscription(email, title_album):
         return True
     except ClientError as e:
         print("Error removing subscription:", e.response['Error']['Message'])
+        return False
+    
+def email_exists(email):
+    try:
+        response = login_table.get_item(Key={'email': email})
+        return 'Item' in response
+    except ClientError:
         return False

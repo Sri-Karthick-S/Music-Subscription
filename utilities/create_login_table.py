@@ -37,12 +37,13 @@ class LoginTable:
                 ProvisionedThroughput={'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5}
             )
             self.table.wait_until_exists()
-            logger.info("✅ Table '%s' created successfully.", self.table_name)
+            logger.info(" Table '%s' created successfully.", self.table_name)
             self.newly_created = True
 
         except ClientError as err:
+            
             logger.error(
-                "❌ Couldn't create table %s. %s: %s",
+                " Couldn't create table %s. %s: %s",
                 self.table_name,
                 err.response["Error"]["Code"],
                 err.response["Error"]["Message"],
@@ -85,6 +86,6 @@ if __name__ == '__main__':
 
     manager.create_table()
 
-    # ✅ Only populate if table was just created
+    #  Only populate if table was just created
     if manager.newly_created:
         manager.populate_users()

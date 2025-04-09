@@ -1,6 +1,6 @@
 /* GLOBAL STYLES (Used for main pages and general layout) */
 :root {
-    --primary: #993A8B;  /* Purple */
+    --primary: #cc2154;  /* Purple */
     --primary-dark: #8A3379;  /* Darker purple for hover states */
     --secondary: #E68057;  /* Orange */
     --tertiary: #BF7587;  /* Mauve */
@@ -14,13 +14,46 @@
     --warning: #ECC94B;  /* Yellow for warnings */
 }
 
-body {
+/* body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     color: var(--text-dark);
     background-color: var(--bg-light);
     width: 100%;
+} */
+/* body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    color: var(--text-dark);
+    background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+    min-height: 100vh;
+    background-attachment: fixed;
+    background-size: cover;
+} */
+/* body {
+    background-color: #f5f5f5;
+    background-image: url('https://www.transparenttextures.com/patterns/geometry2.png');
+    background-size: 200px;
+} */
+
+body {
+    background: linear-gradient(45deg, #5df3c6, #3cb1e7, #5bb8e4, #23d5a0);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
 }
+
+@keyframes gradientShift {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+/* body {
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    background-attachment: fixed;
+    background-size: cover;
+    color: #ffffff;
+} */
+
 
 .flash-container {
     display: flex;
@@ -228,19 +261,23 @@ h1 {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 24px;
 }
+.subscription-list .artist-image {
+    height: 150px;
+}
 
 .music-card {
-    border: 1px solid #E2E8F0;
+    background: linear-gradient(135deg, #b195f1 0%, #fd8f87 100%);
+    border: 1px solid #e0e0e0;
     border-radius: 12px;
-    padding: 18px;
-    transition: all 0.3s ease;
-    background-color: var(--bg-white);
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .music-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    border-color: var(--secondary);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #e78484 0%, #e735a6 100%);
 }
 
 .music-info h3 {
@@ -248,6 +285,15 @@ h1 {
     margin-bottom: 8px;
     font-size: 16px;
     color: var(--text-dark);
+}
+.music-info h3,
+.music-info p {
+    color: #333;
+}
+
+.subscribe-btn, .remove-btn {
+    background-color: #9c27b0;
+    color: white;
 }
 
 .music-info p {
@@ -261,7 +307,8 @@ h1 {
     height: 150px;
     object-fit: cover;
     border-radius: 8px;
-    margin: 12px 0;
+    margin: 10px 0;
+    display: block;
 }
 
 .remove-btn, .subscribe-btn {
@@ -363,3 +410,189 @@ html, body {
     margin: 0 auto;
     padding: 20px;
 }
+
+/* NEW TWO-COLUMN LAYOUT */
+.main-content {
+    display: flex;
+    gap: 24px;
+    height: calc(100vh - 120px); /* Adjust based on your header/footer */
+  }
+  
+  .subscription-section {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .subscription-scrollable {
+    overflow-y: auto;
+    padding-right: 8px;
+    flex-grow: 1;
+  }
+  
+  /* Optional: style for scrollbar */
+  .subscription-scrollable::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .subscription-scrollable::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 3px;
+  }
+  
+  .query-section {
+    flex: 1;
+    min-width: 300px;
+    overflow-y: auto;
+  }
+  
+  .subscription-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    padding-top: 8px;
+  }
+  
+  .main-content {
+    display: flex;
+    gap: 24px;
+    height: calc(100vh - 120px); /* Adjust as needed */
+  }
+  
+  /* SUBSCRIPTION COLUMN */
+  .subscription-section {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .subscription-scrollable {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 6px;
+  }
+  
+  .subscription-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  
+  /* QUERY COLUMN */
+  .query-section {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .query-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  
+  .query-btn {
+    background-color: var(--base);
+    color: white;
+    border: none;
+    padding: 12px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .query-results {
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  .results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+/* Horizontal layout for search results */
+.horizontal-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .horizontal-card .music-text {
+    flex: 1;
+  }
+  
+  .horizontal-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .flip-container {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 400px;
+    height: 500px;
+    position: relative;
+  }
+  
+  .flipper {
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .flipped .flipper {
+    transform: rotateY(180deg);
+  }
+  
+  .front, .back {
+    backface-visibility: hidden;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .front {
+    transform: rotateY(0deg);
+    z-index: 2;
+  }
+  
+  .back {
+    transform: rotateY(180deg);
+    z-index: 1;
+  }
+  .flash-container {
+    margin: 12px 0;
+    text-align: center;
+  }
+  
+  .flash {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  
+  .flash-danger {
+    background-color: rgba(245, 101, 101, 0.1);
+    color: #e53e3e;
+    border: 1px solid #feb2b2;
+  }
+  

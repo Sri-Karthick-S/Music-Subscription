@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="login-wrapper login-bg">
+
+    <!-- Container handles flip state -->
+    <div class="flip-container {% if form_type == 'register' %}flipped{% endif %}" id="flip-box">
+      <div class="flipper">
+  
+        <!-- FRONT: LOGIN -->
+        <div class="front">
+          <div class="card login-card">
+            <h2 class="login-title">Login</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                {% if category.startswith('login') %}
+                <div class="flash flash-{{ category.split('-')[1] }}">{{ message }}</div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+            <form method="POST" action="{{ url_for('login') }}" class="login-form">
+              <label>Email</label>
+              <input type="email" name="email" required>
+              <label>Password</label>
+              <input type="password" name="password" required>
+              <button type="submit" class="login-btn">Login</button>
+            </form>
+            <p class="register-link">Don't have an account?
+              <a href="#" onclick="flipCard(true)">Register</a></p>
+          </div>
+        </div>
+  
+        <!-- BACK: REGISTER -->
+        <div class="back">
+          <div class="card login-card">
+            <h2 class="login-title">Register</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                {% if category.startswith('register') %}
+                <div class="flash flash-{{ category.split('-')[1] }}">{{ message }}</div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('register') }}" class="login-form">
+              <label>Email</label>
+              <input type="email" name="email" required>
+              <label>Username</label>
+              <input type="text" name="username" required>
+              <label>Password</label>
+              <input type="password" name="password" required>
+              <button type="submit" class="login-btn">Register</button>
+            </form>
+            <p class="register-link">Already have an account?
+              <a href="#" onclick="flipCard(false)">Login</a></p>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  
+  </div>
+  
+  <script>
+    function flipCard(toRegister) {
+      const box = document.getElementById('flip-box');
+      if (toRegister) {
+        box.classList.add('flipped');
+      } else {
+        box.classList.remove('flipped');
+      }
+    }
+  </script>
+  
+{% endblock %}
