@@ -105,10 +105,52 @@ body {
     box-sizing: border-box;
   }
 
-  .flash-container {
+  /* .flash-container {
     display: flex;
     justify-content: center;
     margin-top: 16px;
+  } */
+
+  .flash-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    width: auto;
+    max-width: 90%;
+    text-align: center;
+  }
+  
+  .flash-message {
+    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-weight: 500;
+    font-size: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    animation: fadeInOut 1s ease-in-out forwards;
+  }
+  
+  /* Color classes based on Flask flash categories */
+  .success {
+    background-color: #e6ffed;
+    color: #1a7f37;
+    border: 1px solid #b6f3c2;
+  }
+  
+  .warning {
+    background-color: #fff4e5;
+    color: #9f580a;
+    border: 1px solid #ffd18b;
+  }
+  
+  @keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-20px); }
+    10% { opacity: 1; transform: translateY(0); }
+    80% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-20px); }
   }
   
   .flash {
@@ -211,6 +253,16 @@ body {
 .card {
   background: white;
   padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  min-width: 460px; /* ✅ Ensures consistent width */
+  max-width: 100%;   /* ✅ Keeps it responsive */
+  box-sizing: border-box;
+}
+
+.logo-user-header{
+  background: white;
+  padding: 15px;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   min-width: 460px; /* ✅ Ensures consistent width */
@@ -365,6 +417,14 @@ body {
   font-weight: bold;
   transition: background 0.3s ease;
 }
-  
-  
+ 
+body {
+  /*background-image: url("/static/background.jpg");*/
+  background-image: url("/static/img1.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  font-family: Arial, sans-serif;
+}
   

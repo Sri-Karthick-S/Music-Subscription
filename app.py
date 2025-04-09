@@ -45,7 +45,17 @@ def logout():
 @app.route('/main')
 def main():
     subscriptions = get_subscriptions(session['email'])
-    return render_template('main.html', user_name=session['user_name'], subscriptions=subscriptions, results=[])
+    subscribed_titles = {
+        (s['title'].lower(), s['artist'].lower(), s['album'].lower())
+        for s in subscriptions
+    }
+    return render_template(
+        'main.html',
+        user_name=session['user_name'],
+        subscriptions=subscriptions,
+        results=[],
+        subscribed_titles=subscribed_titles
+    )
 
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
@@ -57,11 +67,15 @@ def subscribe():
         'image_url': request.form['image_url']
     }
     result = add_subscription(session['email'], song_data)
+    flash(f"'{song_data['title']}' has been subscribed.", "success")
     return redirect(url_for('main'))
 
 @app.route('/remove', methods=['POST'])
 def remove():
-    remove_subscription(session['email'], request.form['title'], request.form['album'])
+    title = request.form['title']
+    album = request.form['album']
+    remove_subscription(session['email'], title, album)
+    flash(f"'{title}' has been removed from your subscriptions.", "warning")
     return redirect(url_for('main'))
 
 @app.route('/query', methods=['POST'])
@@ -78,12 +92,19 @@ def query_music():
 
     results = search_music(filters)
     subscriptions = get_subscriptions(session['email'])
-    print("Results:", results)
+
+    # Create a set of (title, artist, album) for comparison
+    subscribed_titles = {
+        (s['title'].lower(), s['artist'].lower(), s['album'].lower())
+        for s in subscriptions
+    }
+
     return render_template(
         'main.html',
         user_name=session['user_name'],
         subscriptions=subscriptions,
-        results=results
+        results=results,
+        subscribed_titles=subscribed_titles
     )
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container">
   <!-- Header -->
-  <div class="app-header">
+  <div class="app-header logo-user-header">
     <div class="app-logo">
       <h1>Music Subscription</h1>
     </div>
@@ -47,14 +47,19 @@
                 <div class="music-title">{{ song.title }}</div>
                 <div class="music-meta">{{ song.artist }} • {{ song.year }} • {{ song.album }}</div>
                 </div>
-                <form method="POST" action="{{ url_for('subscribe') }}">
-                <input type="hidden" name="title" value="{{ song.title }}">
-                <input type="hidden" name="album" value="{{ song.album }}">
-                <input type="hidden" name="artist" value="{{ song.artist }}">
-                <input type="hidden" name="year" value="{{ song.year }}">
-                <input type="hidden" name="image_url" value="{{ song.image_url }}">
-                <button class="music-action subscribe-btn">Subscribe</button>
-                </form>
+                {% set song_key = (song.title.lower(), song.artist.lower(), song.album.lower()) %}
+                  {% if song_key in subscribed_titles %}
+                    <button class="music-action subscribe-btn" disabled style="opacity: 0.6; cursor: not-allowed;">Subscribed</button>
+                  {% else %}
+                    <form method="POST" action="{{ url_for('subscribe') }}">
+                      <input type="hidden" name="title" value="{{ song.title }}">
+                      <input type="hidden" name="album" value="{{ song.album }}">
+                      <input type="hidden" name="artist" value="{{ song.artist }}">
+                      <input type="hidden" name="year" value="{{ song.year }}">
+                      <input type="hidden" name="image_url" value="{{ song.image_url }}">
+                      <button class="music-action subscribe-btn">Subscribe</button>
+                    </form>
+                  {% endif %}
             </div>
             {% endfor %}
             {% else %}
