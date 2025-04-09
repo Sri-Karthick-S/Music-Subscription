@@ -14,13 +14,20 @@ subscription_table = dynamodb.Table('subscription')
 
 def check_login(email, password):
     """Check user credentials from the login table."""
+    print("inside check login")
+    print(email, password)
     try:
         response = login_table.get_item(Key={'email': email})
+        print("after get item")
     except ClientError as e:
         print("DynamoDB error:", e.response['Error']['Message'])
+        print("error")
         return None
     else:
+        # print(response,response['Item']['password'] )
         if 'Item' in response and response['Item']['password'] == password:
+            print("success")
+            print(response['Item'])
             return response['Item']
     return None
 

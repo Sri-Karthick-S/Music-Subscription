@@ -15,15 +15,19 @@ def login():
     get_flashed_messages()  # This will remove any pending flash messages
 
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '').strip()
+        print(email,password)
         user = check_login(email, password)
         if user:
             session['user_email'] = user['email']
             session['user_name'] = user.get('user_name', '')
-            return redirect(url_for('main'))
+            user = check_login(">"+ session['user_email'], session['user_name'])
+            print("Rendering main.html")
+            return redirect(url_for('melody'))
         else:
             flash("Email or password is invalid", "danger")
+        print("Rendering main.html")
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
