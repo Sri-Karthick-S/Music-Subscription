@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <!-- Header -->
+  <div class="app-header">
+    <div class="app-logo">
+      <h1>Music Subscription</h1>
+    </div>
+    <div class="user-area">
+      <div class="user-avatar">{{ user_name[0] }}</div>
+      <div class="user-info">
+        <span class="user-name">{{ user_name }}</span>
+        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="main-content">
+
+    <!-- Query Area -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Find Music</h2>
+      </div>
+      <form method="POST" action="{{ url_for('query_music') }}" class="search-form">
+        <input type="text" name="title" placeholder="Title" value="{{ request.form.title }}">
+        <input type="text" name="year" placeholder="Year" value="{{ request.form.year }}">
+        <input type="text" name="artist" placeholder="Artist" value="{{ request.form.artist }}">
+        <input type="text" name="album" placeholder="Album" value="{{ request.form.album }}">
+        
+        <div class="button-group">
+            <button type="submit" class="search-btn">Search</button>
+            <a href="{{ url_for('main') }}" class="clear-btn">Clear</a>
+          </div>
+      </form>
+
+      <div class="results-list">
+        {% if results is defined %}
+            {% if results %}
+            {% for song in results %}
+            <div class="music-item">
+                <div class="music-image">
+                <img src="{{ song.image_url }}" alt="Artist">
+                </div>
+                <div class="music-info">
+                <div class="music-title">{{ song.title }}</div>
+                <div class="music-meta">{{ song.artist }} • {{ song.year }} • {{ song.album }}</div>
+                </div>
+                <form method="POST" action="{{ url_for('subscribe') }}">
+                <input type="hidden" name="title" value="{{ song.title }}">
+                <input type="hidden" name="album" value="{{ song.album }}">
+                <input type="hidden" name="artist" value="{{ song.artist }}">
+                <input type="hidden" name="year" value="{{ song.year }}">
+                <input type="hidden" name="image_url" value="{{ song.image_url }}">
+                <button class="music-action subscribe-btn">Subscribe</button>
+                </form>
+            </div>
+            {% endfor %}
+            {% else %}
+                <p class="empty-state">No result is retrieved. Please query again.</p>
+            {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Subscription Area -->
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">My Subscriptions</h2>
+      </div>
+      <div class="subscription-list">
+        {% if subscriptions %}
+          {% for song in subscriptions %}
+          <div class="music-item">
+            <div class="music-image">
+              <img src="{{ song.image_url }}" alt="Artist">
+            </div>
+            <div class="music-info">
+              <div class="music-title">{{ song.title }}</div>
+              <div class="music-meta">{{ song.artist }} • {{ song.year }} • {{ song.album }}</div>
+            </div>
+            <form method="POST" action="{{ url_for('remove') }}">
+              <input type="hidden" name="title" value="{{ song.title }}">
+              <input type="hidden" name="album" value="{{ song.album }}">
+              <button class="music-action remove-btn">Remove</button>
+            </form>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty-state">You haven't subscribed to any songs yet.</div>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

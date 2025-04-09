@@ -1,13 +1,26 @@
 body {
-    background-color: #edeaff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
     font-family: 'Segoe UI', sans-serif;
+    background-color: #edeaff;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
   }
   
+  .container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  /* vertical centering */
+    align-items: center;      /* horizontal centering */
+    padding: 40px 20px;
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+
   .login-wrapper {
     width: 100%;
     display: flex;
@@ -126,6 +139,232 @@ body {
     color: #8a6d3b;
     border: 1px solid #f2d095;
   }
+
+  .app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;   /* ✅ Key to aligning vertically */
+    margin-bottom: 32px;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 0px;
+    box-sizing: border-box;
+  }
+  
+  .app-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #6d4ef1;
+  }
+  
+  .user-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #7e63f7;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  .user-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #111;
+  }
+  
+  .logout-btn {
+    font-size: 14px;
+    color: #6a4be8;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+  }
+  
+  .logout-btn:hover {
+    border-color: #6a4be8;
+    background-color: #f1edff;
+  }
+
+.main-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;  /* ✅ Ensures columns don’t stretch unevenly */
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 40px; /* Some space at the bottom */
+}
+
+.card {
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  min-width: 460px; /* ✅ Ensures consistent width */
+  max-width: 100%;   /* ✅ Keeps it responsive */
+  box-sizing: border-box;
+}
+
+/* Card title */
+.card-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.search-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.search-form input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.search-btn {
+  grid-column: 1 / span 2;  /* Full width but aligned with the form grid */
+  padding: 12px;
+  background-color: #6d4ef1;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.search-btn:hover {
+  background-color: #593de0;
+}
+
+/* Music item */
+.music-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  background: #f8f6ff;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.music-image img {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.music-info {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.music-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.music-meta {
+  font-size: 13px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.music-action {
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.subscribe-btn {
+  background-color: #ebe5fd;
+  color: #593de0;
+}
+
+.subscribe-btn:hover {
+  background-color: #d7ccfc;
+}
+
+.remove-btn {
+  background-color: #ffe5e5;
+  color: #cc2b2b;
+}
+
+.remove-btn:hover {
+  background-color: #ffc9c9;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+.results-list {
+  min-height: 140px; /* Adjust as needed */
+}
+
+.button-group {
+  grid-column: span 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.search-btn {
+  flex: 1;
+  padding: 12px;
+  background-color: #6d4ef1;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.clear-btn {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  background-color: #f1f1f1;
+  color: #666;
+  text-decoration: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
   
   
   

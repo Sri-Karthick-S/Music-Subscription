@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 import boto3
-from aws.dynamodb_utils import check_login, register_user
+from aws.dynamodb_utils import check_login, register_user, get_subscriptions, add_subscription, remove_subscription, search_music
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'
@@ -17,6 +17,7 @@ def login():
         user = check_login(email, password)
         if user:
             session['user_name'] = user['user_name']
+            session['email'] = email
             return redirect(url_for('main'))
         else:
             flash("Email or password is invalid", "danger")
@@ -36,16 +37,54 @@ def register():
             return redirect(url_for('login'))
     return render_template('register.html')
 
-@app.route('/main')
-def main():
-    if 'user_name' not in session:
-        return redirect(url_for('login'))
-    return render_template('main.html', user_name=session['user_name'])
-
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
+@app.route('/main')
+def main():
+    subscriptions = get_subscriptions(session['email'])
+    return render_template('main.html', user_name=session['user_name'], subscriptions=subscriptions, results=[])
+
+@app.route('/subscribe', methods=['POST'])
+def subscribe():
+    song_data = {
+        'title': request.form['title'],
+        'album': request.form['album'],
+        'artist': request.form['artist'],
+        'year': request.form['year'],
+        'image_url': request.form['image_url']
+    }
+    result = add_subscription(session['email'], song_data)
+    return redirect(url_for('main'))
+
+@app.route('/remove', methods=['POST'])
+def remove():
+    remove_subscription(session['email'], request.form['title'], request.form['album'])
+    return redirect(url_for('main'))
+
+@app.route('/query', methods=['POST'])
+def query_music():
+    if 'email' not in session or 'user_name' not in session:
+        return redirect(url_for('login'))
+
+    filters = {
+        'title': request.form.get('title'),
+        'artist': request.form.get('artist'),
+        'year': request.form.get('year'),
+        'album': request.form.get('album')
+    }
+
+    results = search_music(filters)
+    subscriptions = get_subscriptions(session['email'])
+    print("Results:", results)
+    return render_template(
+        'main.html',
+        user_name=session['user_name'],
+        subscriptions=subscriptions,
+        results=results
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
