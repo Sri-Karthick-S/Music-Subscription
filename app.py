@@ -4,7 +4,7 @@ import requests
 from utilities.dynamoDb_utils import check_login, search_music, get_user_subscriptions
 from utilities.s3_utils import get_presigned_url
 
-
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # Replace with a secure key or use environment variables
 
