@@ -21,6 +21,8 @@ app.secret_key = 'your-secret-key'
 @app.route('/')
 def home():
     return redirect(url_for('login'))
+
+
 login_API= "https://wir5etx69g.execute-api.us-east-1.amazonaws.com/dev_user_login"
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -187,19 +189,35 @@ def register():
     
 #     flash("✅ Registered successfully! Please login.", "register-success")
 #     return render_template('auth.html', form_type='register')
+
+SEARCH_API = "https://0433e01uuc.execute-api.us-east-1.amazonaws.com/dev_main/search"
+GET_SUBS_API = "https://0433e01uuc.execute-api.us-east-1.amazonaws.com/dev_main/subscriptions"
+
 @app.route('/main', methods=['GET', 'POST'])
 def main():
     if 'user_email' not in session:
         return redirect(url_for('login'))
 
-    subscriptions = get_user_subscriptions(session['user_email'])
-    for sub in subscriptions:
-        if 's3_key' in sub and sub['s3_key']:
-            sub['image_url'] = get_presigned_url(sub['s3_key'])
+    user_email = session['user_email']
+    user_name = session.get('user_name', '')
+
+    # 1️⃣ Get subscriptions from Lambda
+    subscriptions = []
+    try:
+        resp = requests.post(GET_SUBS_API, json={"email": user_email}, timeout=5)
+        if resp.status_code == 200:
+            subscriptions = resp.json()
+            # Add image URLs for subscriptions
+            for sub in subscriptions:
+                if 's3_key' in sub and sub['s3_key']:
+                    sub['image_url'] = get_presigned_url(sub['s3_key'])
+    except Exception as e:
+        print("Subscription API error:", e)
 
     results = []
     query_performed = False
 
+    # 2️⃣ Perform search if POST or reuse last search
     if request.method == 'POST':
         criteria = {
             'title': request.form.get('title', ''),
@@ -207,28 +225,83 @@ def main():
             'album': request.form.get('album', ''),
             'year': request.form.get('year', '')
         }
-        session['last_search'] = criteria  # Store for reuse
-        results = search_music(criteria)
-        query_performed = True
+        session['last_search'] = criteria
+        try:
+            res = requests.post(SEARCH_API, json=criteria, timeout=5)
+            if res.status_code == 200:
+                results = res.json()
+                query_performed = True
+        except Exception as e:
+            print("Search API error:", e)
     elif 'last_search' in session:
-        criteria = session['last_search']
-        results = search_music(criteria)
-        query_performed = True
+        try:
+            res = requests.post(SEARCH_API, json=session['last_search'], timeout=5)
+            if res.status_code == 200:
+                results = res.json()
+                query_performed = True
+        except Exception as e:
+            print("Search API error:", e)
 
+    # 3️⃣ Add image URLs and mark subscribed results
     for res in results:
         if 's3_key' in res and res['s3_key']:
             res['image_url'] = get_presigned_url(res['s3_key'])
+
         title_album = res.get('title_album')
         res['subscribed'] = any(sub['title_album'] == title_album for sub in subscriptions)
 
     return render_template('main.html',
-                           user_name=session['user_name'],
+                           user_name=user_name,
                            subscriptions=subscriptions,
                            results=results,
                            query_performed=query_performed)
 
-SUBSCRIBE_API = "https://vdsho12tm1.execute-api.us-east-1.amazonaws.com/stage_subscribe"
 
+
+# @app.route('/main', methods=['GET', 'POST'])
+# def main():
+#     if 'user_email' not in session:
+#         return redirect(url_for('login'))
+
+#     subscriptions = get_user_subscriptions(session['user_email'])
+#     for sub in subscriptions:
+#         if 's3_key' in sub and sub['s3_key']:
+#             sub['image_url'] = get_presigned_url(sub['s3_key'])
+
+#     results = []
+#     query_performed = False
+
+#     if request.method == 'POST':
+#         criteria = {
+#             'title': request.form.get('title', ''),
+#             'artist': request.form.get('artist', ''),
+#             'album': request.form.get('album', ''),
+#             'year': request.form.get('year', '')
+#         }
+#         session['last_search'] = criteria  # Store for reuse
+#         results = search_music(criteria)
+#         query_performed = True
+#     elif 'last_search' in session:
+#         criteria = session['last_search']
+#         results = search_music(criteria)
+#         query_performed = True
+
+#     for res in results:
+#         if 's3_key' in res and res['s3_key']:
+#             res['image_url'] = get_presigned_url(res['s3_key'])
+#         title_album = res.get('title_album')
+#         res['subscribed'] = any(sub['title_album'] == title_album for sub in subscriptions)
+
+#     return render_template('main.html',
+#                            user_name=session['user_name'],
+#                            subscriptions=subscriptions,
+#                            results=results,
+#                            query_performed=query_performed)
+
+
+
+
+SUBSCRIBE_API = "https://i5fbktqbg0.execute-api.us-east-1.amazonaws.com/dev_subscribe/subscribe"
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
     if 'user_email' not in session:
@@ -246,7 +319,6 @@ def subscribe():
         'year': request.form.get('year'),
         's3_key': request.form.get('s3_key')
     }
-
     try:
         response = requests.post(SUBSCRIBE_API, json=song_data, timeout=5)
         if response.status_code == 201:
@@ -280,8 +352,8 @@ def subscribe():
 #         flash("Subscription failed", "danger")
 #     return redirect(url_for('main'))
 
-UNSUBSCRIBE_API = "https://ao8j3lblfk.execute-api.us-east-1.amazonaws.com/dev_remove_subscription"
 
+UNSUBSCRIBE_API = "https://i5fbktqbg0.execute-api.us-east-1.amazonaws.com/dev_subscribe/unsubscribe"
 @app.route('/remove_subscription', methods=['POST'])
 def remove_subscription_route():
     if 'user_email' not in session:
