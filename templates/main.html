@@ -4,17 +4,19 @@
 
   <!-- HEADER -->
   <header class="header-row">
-    <h1>Melodify - Music Subscription</h1>
+    <div class="brand-header">
+      <h1 class="brand-title">Melodify Music Subscription</h1>
+      <p class="brand-subtitle">Where music meets your vibe 🎶</p>
+    </div>
     <div class="user-area">
-      <span class="user-name">Welcome,  {{ user_name }}</span>
-      
+      Welcome, 👋 <span class="user-name">
+        <strong>{{ user_name }}</strong>
+      </span>
       <a href="{{ url_for('logout') }}" class="logout">Logout</a>
     </div>
   </header>
-
   <!-- MAIN WRAPPER -->
   <div class="main-content">
-
     <!-- LEFT: SUBSCRIPTIONS AREA -->
     <section class="subscription-section">
       <h2 class="subscription-title">Your Subscriptions</h2>

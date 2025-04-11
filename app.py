@@ -35,7 +35,7 @@ def login():
         # Validate email
         if not re.match(r'^s\d{7,8}@student\.rmit\.edu\.au$', email):
             flash("Invalid RMIT student email format.", "login-danger")
-            return render_template('auth.html', form_type='login')
+            return render_template('auth.html', form_type='login', email='')
 
         # ✅ Call Lambda through API Gateway
         try:
@@ -62,7 +62,7 @@ def login():
             print("Login API failed:", e)
             flash("Could not connect to login service.", "login-danger")
 
-    return render_template('auth.html', form_type='login')
+    return render_template('auth.html', form_type='login', email='')
 
 # @app.route('/login', methods=['GET', 'POST'])
 # def login():

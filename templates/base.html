@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Melodify</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Aladin&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sofia&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tangerine&display=swap" rel="stylesheet">
 </head>
 <body class="{% if not session.get('user_email') %}bg{% endif %}">
 {% block content %}{% endblock %}
