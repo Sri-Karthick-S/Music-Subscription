@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Unsubscribe from Song</h2>
+<form method="POST">
+    <label for="email">Email:</label>
+    <input type="email" name="email" required><br><br>
+
+    <label for="song">Song:</label>
+    <input type="text" name="song" required><br><br>
+
+    <button type="submit">Unsubscribe</button>
+</form>
+{% endblock %}

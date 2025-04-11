@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Subscriptions</title>
+</head>
+<body>
+    <h1>Subscribed Songs</h1>
+    {% if songs %}
+        <ul>
+        {% for song in songs %}
+            <li>{{ song }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No subscriptions found.</p>
+    {% endif %}
+    <a href="{{ url_for('main') }}">Back to Home</a>
+</body>
+</html>
+

@@ -12,16 +12,26 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
+        email = request.form['email'].strip().lower()
+        password = request.form['password'].strip()
+
+        print(f"🔍 Received: {email=}, {password=}")  # Debug print
+
         user = check_login(email, password)
+        print(f"📦 check_login returned: {user}")  # Debug print
+
         if user:
             session['user_name'] = user['user_name']
+            print("✅ Login successful!")
             return redirect(url_for('main'))
         else:
+            print("❌ Invalid login credentials.")
             flash("Invalid email or password")
             return redirect(url_for('login'))
+
     return render_template('login.html')
+
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

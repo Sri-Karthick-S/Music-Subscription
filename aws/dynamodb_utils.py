@@ -10,6 +10,7 @@ def check_login(email, password):
     try:
         response = login_table.get_item(Key={'email': email})
         item = response.get('Item')
+        print("DEBUG: Fetched item ->", item)  # 🔍 ADD THIS LINE
         if item and item['password'] == password:
             return item
         else:
