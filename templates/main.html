@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Music Subscription - Main Page</title>
+</head>
+<body>
+    <h1>Welcome, {{ user_name }}</h1>
+
+    <p>Choose an action:</p>
+    
+    <ul>
+        <li><a href="{{ url_for('subscribe') }}">Subscribe to a Song</a></li>
+        <li><a href="{{ url_for('get_subscriptions') }}?email={{ session['user_name'] }}">View My Subscriptions</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+</body>
+</html>
+

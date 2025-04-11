@@ -14,7 +14,7 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        user = check_login(email, password)  # ✅ Using boto3-based function
+        user = check_login(email, password)
         if user:
             session['user_name'] = user['user_name']
             return redirect(url_for('main'))
@@ -22,6 +22,7 @@ def login():
             flash("Invalid email or password")
             return redirect(url_for('login'))
     return render_template('login.html')
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -46,7 +47,86 @@ def register():
 
     return render_template('register.html')
 
+@app.route('/unsubscribe', methods=['GET', 'POST'])
+def unsubscribe():
+    if request.method == 'POST':
+        email = request.form['email']
+        song = request.form['song']
 
+        url = "https://m0uoz68yl6.execute-api.us-east-1.amazonaws.com/dev/unsubscribe"
+
+        payload = {
+            "email": email,
+            "song": song
+        }
+
+        headers = {
+            "Content-Type": "application/json"
+        }
+
+        response = requests.post(url, json=payload, headers=headers)
+
+        if response.status_code == 200:
+            flash("Unsubscribed successfully!", "success")
+        elif response.status_code == 404:
+            flash("Subscription not found.", "warning")
+        else:
+            flash("Unsubscription failed. Try again.", "danger")
+
+        return redirect(url_for('unsubscribe'))
+
+    return render_template('unsubscribe.html')
+
+@app.route('/subscribe', methods=['GET', 'POST'])
+def subscribe():
+    if request.method == 'POST':
+        email = request.form['email']
+        song = request.form['song']
+
+        url = "https://m0uoz68yl6.execute-api.us-east-1.amazonaws.com/dev/subscribe"
+
+        payload = {
+            "email": email,
+            "song": song
+        }
+
+        headers = {
+            "Content-Type": "application/json"
+        }
+
+        response = requests.post(url, json=payload, headers=headers)
+
+        if response.status_code == 200:
+            flash("Subscribed successfully!", "success")
+        elif response.status_code == 409:
+            flash("Already subscribed.", "warning")
+        elif response.status_code == 404:
+            flash("Song does not exist.", "warning")
+        else:
+            flash("Subscription failed. Try again.", "danger")
+
+        return redirect(url_for('subscribe'))
+
+    return render_template('subscribe.html')
+
+@app.route('/subscriptions', methods=['GET'])
+def get_subscriptions():
+    email = request.args.get('email')
+    if not email:
+        return "Email is required", 400
+
+    url = "https://m0uoz68yl6.execute-api.us-east-1.amazonaws.com/dev/subscriptions"
+    try:
+        response = requests.get(url, params={"email": email})
+        if response.status_code == 200:
+            data = response.json()
+            return render_template('subscriptions.html', songs=data.get('subscriptions', []))
+        else:
+            flash("Error retrieving subscriptions", "danger")
+            return redirect(url_for('main'))
+    except requests.RequestException:
+        flash("Unable to connect to subscriptions API", "danger")
+        return redirect(url_for('main'))
 
 @app.route('/main')
 def main():
