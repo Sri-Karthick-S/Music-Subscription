@@ -1,12 +1,12 @@
 /* GLOBAL STYLES (Used for main pages and general layout) */
 :root {
-    --primary: #cc2154;  /* Purple */
+    --primary: #bb1547;  /* Purple */
     --primary-dark: #8A3379;  /* Darker purple for hover states */
     --secondary: #E68057;  /* Orange */
     --tertiary: #BF7587;  /* Mauve */
     --base: #A2574F;  /* Terracotta */
-    --text-dark: #333333;  /* Dark gray for text */
-    --text-light: #777777;  /* Light gray for secondary text */
+    --text-dark: #000000;  /* Dark gray for text */
+    --text-light: #160101;  /* Light gray for secondary text */
     --bg-light: #F7F5F2;  /* Light background */
     --bg-white: #FFFFFF;  /* White background */
     --success: #48BB78;  /* Green for success messages */
@@ -37,7 +37,7 @@
 } */
 
 body {
-    background: linear-gradient(45deg, #5df3c6, #3cb1e7, #5bb8e4, #23d5a0);
+    background: linear-gradient(45deg, #47e6b6, #1e9fdb, #5bb8e4, #19daa0);
     background-size: 400% 400%;
     animation: gradientShift 20s ease infinite;
 }
@@ -202,12 +202,14 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    text-align: center;
     padding: 20px 0;
     border-bottom: 1px solid #E2E8F0;
 }
 
 h1 {
     margin: 0;
+    font-family: 'sans-serif';
     color: var(--primary);
 }
 
@@ -217,16 +219,19 @@ h1 {
 }
 
 .user-name {
-    margin-right: 20px;
-    font-weight: bold;
-    color: var(--text-dark);
+  margin-right: 20px;
+  font-weight: bold;
+  color: var(--text-dark);
+  align-items: center;
+  font-family: 'Segoe UI'; 
 }
+/* } , Verdana, sans-serifTahoma, Geneva,  */
 
 .logout {
-    text-decoration: none;
-    color: var(--text-light);
-    font-size: 14px;
-    transition: color 0.2s ease;
+    text-decoration:#23d5a0;
+    color: var(black);
+    font-size: 16px;
+    transition: color 0.5s ease;
 }
 
 .logout:hover {
@@ -236,17 +241,19 @@ h1 {
 
 .subscription-area, .query-area {
     margin-top: 30px;
-    background-color: var(--bg-white);
+    background-color: var(rgb(241, 163, 163));
     border-radius: 12px;
     padding: 24px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
+/* --bg-white */
 
 .subscription-title {
-    margin-top: 0;
-    color: var(--text-dark);
-    border-bottom: 1px solid #E2E8F0;
-    padding-bottom: 12px;
+  margin-top: 0;
+  color: var(--text-dark);
+  border-bottom: 1px solid #E2E8F0;
+  padding-bottom: 12px;
+  text-align: center;  
 }
 
 .subscription-empty {
@@ -259,6 +266,7 @@ h1 {
 .subscription-list, .results-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    
     gap: 24px;
 }
 .subscription-list .artist-image {
@@ -267,7 +275,7 @@ h1 {
 
 .music-card {
     background: linear-gradient(135deg, #b195f1 0%, #fd8f87 100%);
-    border: 1px solid #e0e0e0;
+    border: 1px solid #2c21cf;
     border-radius: 12px;
     padding: 16px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.06);
@@ -288,7 +296,8 @@ h1 {
 }
 .music-info h3,
 .music-info p {
-    color: #333;
+    color: #12f50a;
+    color: var(--text-dark);
 }
 
 .subscribe-btn, .remove-btn {
