@@ -39,9 +39,9 @@ def login():
                 session['user_name'] = user.get('user_name', '')
                 return redirect(url_for('main'))
             elif response.status_code == 401:
-                flash("Incorrect password.", "login-danger")
+                flash("Email or Password incorrect", "login-danger")
             elif response.status_code == 404:
-                flash("Email not found.", "login-danger")
+                flash("Email or Password incorrect.", "login-danger")
             elif response.status_code == 400:
                 flash("Missing email or password.", "login-danger")
             else:
