@@ -22,7 +22,7 @@
    GLOBAL & BACKGROUND
 ========================== */
 body {
-  background: linear-gradient(45deg, #47e6b6, #1e9fdb, #7481fc, #67dbeb);
+  background: linear-gradient(135deg, #ba5370 0%, #f4e2d8 100%); /* #67dbeb,#52e092 */
   background-size: 400% 400%;
   animation: gradientShift 20s ease infinite;
   margin: 0;
