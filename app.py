@@ -65,10 +65,18 @@ def register():
         username = request.form['username'].strip()
         password = request.form['password'].strip()
 
-        #  1. Validate Email
-        if not re.match(r'^s\d{7,8}@student\.rmit\.edu\.au$', email):
-            flash(" Invalid email format. Must be RMIT student email.", "register-danger")
+        general_email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        rmit_email_regex = r'^s\d{7,8}@student\.rmit\.edu\.au$'
+
+        # Assume `email` is the input
+        if not (re.match(general_email_regex, email) or re.match(rmit_email_regex, email)):
+            flash(" Invalid Email format", "register-danger")
             return render_template('auth.html', form_type='register')
+
+        # #  1. Validate Email
+        # if not re.match(r'^s\d{7,8}@student\.rmit\.edu\.au$', email):
+        #     flash(" Invalid email format. Must be RMIT student email.", "register-danger")
+        #     return render_template('auth.html', form_type='register')
 
         #  2. Validate Username
         if not re.match(r'^[A-Za-z][A-Za-z0-9_]{2,}$', username):
@@ -76,9 +84,9 @@ def register():
             return render_template('auth.html', form_type='register')
 
         #  3. Validate Password
-        if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,12}$', password):
-            flash(" Password must be 6–12 characters with upper, lower, digit & special char.", "register-danger")
-            return render_template('auth.html', form_type='register')
+        # if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,12}$', password):
+        #     flash(" Password must be 6–12 characters with upper, lower, digit & special char.", "register-danger")
+        #     return render_template('auth.html', form_type='register')
 
         #  4. Call API Gateway to trigger Lambda for registration
         try:
