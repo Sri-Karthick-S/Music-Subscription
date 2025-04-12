@@ -12,7 +12,6 @@ class MusicDataLoader:
         self.dynamodb = boto3.resource(
             'dynamodb',
             region_name='us-east-1',
-           
         )
         self.table_name = 'music'
         self.table = self.dynamodb.Table(self.table_name)

@@ -1,17 +1,29 @@
+# ------------------------------------------------------------
+# IMPORTS
+# ------------------------------------------------------------
 from flask import Flask, render_template, request, redirect, url_for, flash, session, get_flashed_messages
 # from utilities.s3_utils import get_presigned_url
 import re
 from botocore.exceptions import ClientError
 import requests
-
+# ------------------------------------------------------------
+# FLASK APP SETUP
+# ------------------------------------------------------------
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  
-
+# ------------------------------------------------------------
+# ROUTE: Redirect base route '/' to login page
+# ------------------------------------------------------------
 @app.route('/')
 def home():
     return redirect(url_for('login'))
 
-
+# ------------------------------------------------------------
+# LOGIN ROUTE
+# - Validates user credentials
+# - Makes POST request to login Lambda via API Gateway
+# - Flashes error on invalid credentials
+# ------------------------------------------------------------
 login_API= "https://wir5etx69g.execute-api.us-east-1.amazonaws.com/dev_user_login"
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -59,6 +71,11 @@ def login():
 
     return render_template('auth.html', form_type='login', email='')
 
+# ------------------------------------------------------------
+# REGISTER ROUTE
+# - Validates new user
+# - Submits registration via Lambda API Gateway
+# ------------------------------------------------------------
 registter_API="https://b3sckbrua9.execute-api.us-east-1.amazonaws.com/dev_user_register"
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -117,6 +134,12 @@ def register():
 
     return render_template('auth.html', form_type='register')
 
+# ------------------------------------------------------------
+# MAIN PAGE
+# - Shows subscriptions (left)
+# - Query/search music results (right)
+# - Uses GET_SUBS_API and SEARCH_API
+# ------------------------------------------------------------
 SEARCH_API = "https://0433e01uuc.execute-api.us-east-1.amazonaws.com/dev_main/search"
 GET_SUBS_API = "https://0433e01uuc.execute-api.us-east-1.amazonaws.com/dev_main/subscriptions"
 
@@ -174,6 +197,10 @@ def main():
                            results=results,
                            query_performed=query_performed)
 
+# ------------------------------------------------------------
+# SUBSCRIBE TO SONG
+# - Adds song to user’s subscription
+# ------------------------------------------------------------
 SUBSCRIBE_API = "https://i5fbktqbg0.execute-api.us-east-1.amazonaws.com/dev_subscribe/subscribe"
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
@@ -204,6 +231,9 @@ def subscribe():
 
     return redirect(url_for('main'))
 
+# ------------------------------------------------------------
+# REMOVE SUBSCRIPTION
+# ------------------------------------------------------------
 UNSUBSCRIBE_API = "https://i5fbktqbg0.execute-api.us-east-1.amazonaws.com/dev_subscribe/unsubscribe"
 @app.route('/remove_subscription', methods=['POST'])
 def remove_subscription_route():
@@ -234,11 +264,17 @@ def remove_subscription_route():
 
     return redirect(url_for('main'))
 
+# ------------------------------------------------------------
+# LOGOUT
+# ------------------------------------------------------------
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('login'))
 
+# ------------------------------------------------------------
+# DISABLE CACHING ON RESPONSES
+# ------------------------------------------------------------
 @app.after_request
 def add_no_cache_headers(response):
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0"
@@ -246,5 +282,8 @@ def add_no_cache_headers(response):
     response.headers["Expires"] = "0"
     return response
 
+# ------------------------------------------------------------
+# LOCAL TEST ENTRYPOINT (NOT USED IN PROD)
+# ------------------------------------------------------------
 if __name__ == '__main__':
     app.run(debug=True)
