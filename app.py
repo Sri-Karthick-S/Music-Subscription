@@ -15,7 +15,9 @@ def home():
 login_API= "https://wir5etx69g.execute-api.us-east-1.amazonaws.com/dev_user_login"
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # flash(" ", "login-danger")
     # get_flashed_messages()
+    # flash("   ", "login-danger")
 
     if request.method == 'POST':
         email = request.form.get('email', '').strip()

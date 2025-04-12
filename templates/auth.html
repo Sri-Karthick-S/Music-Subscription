@@ -13,7 +13,7 @@
 
   <!-- RIGHT: Login/Register Flip Card -->
   <div class="auth-right">
-    <div class="flip-container {% if form_type == 'register' %}flipped{% endif %}" id="flip-box">
+    <div class="flip-container"  id="flip-box">
       <div class="flipper">
 
         <!-- FRONT: LOGIN -->
@@ -81,14 +81,29 @@
 </div>
 
 <script>
+  
   function flipCard(toRegister) {
     const box = document.getElementById('flip-box');
     if (toRegister) {
       box.classList.add('flipped');
+      sessionStorage.setItem('form_type', 'register');
+    } else {
+      box.classList.remove('flipped');
+      sessionStorage.setItem('form_type', 'login');
+    }
+  }
+
+  // 🧠 Apply saved state on page load (to prevent unwanted flip back)
+  window.onload = function () {
+    const formType = sessionStorage.getItem('form_type') || 'login';
+    const box = document.getElementById('flip-box');
+    if (formType === 'register') {
+      box.classList.add('flipped');
     } else {
       box.classList.remove('flipped');
     }
-  }
+  };
 </script>
+
 
 {% endblock %}
