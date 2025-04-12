@@ -24,8 +24,8 @@
               {% if messages %}
                 <div class="flash-container">
                   {% for category, message in messages %}
-                    {% if category.startswith('login') %}
-                      <div class="flash flash-{{ category.split('-')[1] }}">{{ message }}</div>
+                    {% if category.startswith('login') or category == 'login-success' %}
+                      <div class="flash flash-{{ category.split('-')[1] if '-' in category else 'success' }}">{{ message }}</div>
                     {% endif %}
                   {% endfor %}
                 </div>
@@ -81,7 +81,6 @@
 </div>
 
 <script>
-  
   function flipCard(toRegister) {
     const box = document.getElementById('flip-box');
     if (toRegister) {
@@ -93,14 +92,25 @@
     }
   }
 
-  // 🧠 Apply saved state on page load (to prevent unwanted flip back)
+  // 🌟 Determine flip state from session or flash (on redirect)
   window.onload = function () {
-    const formType = sessionStorage.getItem('form_type') || 'login';
+    const urlParams = new URLSearchParams(window.location.search);
+    const successRedirect = urlParams.get('show_login') === 'true';
+
     const box = document.getElementById('flip-box');
-    if (formType === 'register') {
-      box.classList.add('flipped');
-    } else {
+
+    if (successRedirect) {
+      // Registration success, flip to login
       box.classList.remove('flipped');
+      sessionStorage.setItem('form_type', 'login');
+    } else {
+      // Regular flip behavior (use stored session state)
+      const formType = sessionStorage.getItem('form_type') || 'login';
+      if (formType === 'register') {
+        box.classList.add('flipped');
+      } else {
+        box.classList.remove('flipped');
+      }
     }
   };
 </script>

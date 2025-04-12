@@ -69,7 +69,8 @@ def login():
             print("Login API failed:", e)
             flash("Could not connect to login service.", "login-danger")
 
-    return render_template('auth.html', form_type='login', email='')
+    form_type = 'login' if request.args.get('show_login') == 'true' else 'register' if request.args.get('form') == 'register' else 'login'
+    return render_template('auth.html', form_type=form_type, email='')
 
 # ------------------------------------------------------------
 # REGISTER ROUTE
@@ -120,8 +121,8 @@ def register():
             )
             
             if response.status_code == 201:
-                flash(" Registered successfully! Please login.", "login-sucess")
-                return redirect(url_for('login'))
+                flash(" Registered successfully! Please login.", "login-success")
+                return redirect(url_for('login', show_login='true'))
 
             elif response.status_code == 409:
                 flash(" Email already exists. Please login or use another.", "register-danger")
