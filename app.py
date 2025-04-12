@@ -22,7 +22,11 @@ def login():
         password = request.form.get('password', '').strip()
 
         # Validate email
-        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ', email): #  ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$  r'^s\d{7,8}@student\.rmit\.edu\.au$'
+        general_email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        rmit_email_regex = r'^s\d{7,8}@student\.rmit\.edu\.au$'
+
+        # Assume `email` is the input
+        if not (re.match(general_email_regex, email) or re.match(rmit_email_regex, email)):
             flash("Invalid Email format.", "login-danger")
             return render_template('auth.html', form_type='login', email='')
 
