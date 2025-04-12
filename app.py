@@ -79,9 +79,9 @@ def register():
         #     return render_template('auth.html', form_type='register')
 
         #  2. Validate Username
-        if not re.match(r'^[A-Za-z][A-Za-z0-9_]{1,}$', username):
-            flash(" Username must start with a letter.", "register-danger")
-            return render_template('auth.html', form_type='register')
+        # if not re.match(r'^[A-Za-z][A-Za-z0-9_]{1,}$', username):
+        #     flash(" Username must start with a letter.", "register-danger")
+        #     return render_template('auth.html', form_type='register')
 
         #  3. Validate Password
         # if not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,12}$', password):
@@ -99,8 +99,7 @@ def register():
                 },
                 timeout=5
             )
-            print("a")
-            print(response)
+            
             if response.status_code == 201:
                 flash(" Registered successfully! Please login.", "login-sucess")
                 return redirect(url_for('login'))
