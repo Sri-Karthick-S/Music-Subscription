@@ -79,7 +79,7 @@ def register():
         #     return render_template('auth.html', form_type='register')
 
         #  2. Validate Username
-        if not re.match(r'^[A-Za-z][A-Za-z0-9_]{2,}$', username):
+        if not re.match(r'^[A-Za-z][A-Za-z0-9_]{1,}$', username):
             flash(" Username must start with a letter.", "register-danger")
             return render_template('auth.html', form_type='register')
 
