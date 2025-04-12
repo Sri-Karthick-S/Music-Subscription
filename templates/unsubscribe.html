@@ -3,12 +3,17 @@
 {% block content %}
 <h2>Unsubscribe from Song</h2>
 <form method="POST">
-    <label for="email">Email:</label>
-    <input type="email" name="email" required><br><br>
-
+    
     <label for="song">Song:</label>
     <input type="text" name="song" required><br><br>
 
     <button type="submit">Unsubscribe</button>
 </form>
+
+<!-- Back to Home button -->
+<br>
+<a href="{{ url_for('main') }}" style="display:inline-block; margin-top: 20px; padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px;">
+    ⬅️ Back to Home
+</a>
 {% endblock %}
+

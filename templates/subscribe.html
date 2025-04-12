@@ -19,8 +19,7 @@
     {% endwith %}
 
     <form method="POST">
-        <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
+        
 
         <label>Song Name:</label><br>
         <input type="text" name="song" required><br><br>
@@ -29,6 +28,7 @@
     </form>
 
     <br>
-    <a href="/">Back to Home</a>
+    <a href="{{ url_for('main') }}">Back to Home</a>
+
 </body>
 </html>

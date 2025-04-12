@@ -2,17 +2,72 @@
 <html>
 <head>
     <title>Music Subscription - Main Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f0f4f8;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #666;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 30px;
+        }
+
+        li {
+            margin: 15px 0;
+        }
+
+        a {
+            display: inline-block;
+            padding: 12px 24px;
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF;
+            border-radius: 6px;
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome, {{ user_name }}</h1>
+    <div class="container">
+        <h1>Welcome, {{ user_name }} 🎶</h1>
+        <p>Select an action below:</p>
 
-    <p>Choose an action:</p>
-    
-    <ul>
-        <li><a href="{{ url_for('subscribe') }}">Subscribe to a Song</a></li>
-        <li><a href="{{ url_for('get_subscriptions') }}?email={{ session['user_name'] }}">View My Subscriptions</a></li>
-        <li><a href="{{ url_for('logout') }}">Logout</a></li>
-    </ul>
+        <ul>
+            <li><a href="{{ url_for('subscribe') }}">🎧 Subscribe to a Song</a></li>
+            <li><a href="{{ url_for('get_subscriptions') }}">📜 View My Subscriptions</a></li>
+            <li><a href="{{ url_for('unsubscribe') }}">❌ Unsubscribe from a Song</a></li>
+            <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+        </ul>
+    </div>
 </body>
 </html>
+
 

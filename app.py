@@ -15,17 +15,18 @@ def login():
         email = request.form['email'].strip().lower()
         password = request.form['password'].strip()
 
-        print(f"🔍 Received: {email=}, {password=}")  # Debug print
+        print(f" Received: {email=}, {password=}")  # Debug print
 
         user = check_login(email, password)
-        print(f"📦 check_login returned: {user}")  # Debug print
+        print(f" check_login returned: {user}")  # Debug print
 
         if user:
             session['user_name'] = user['user_name']
-            print("✅ Login successful!")
+            session['email'] = user['email']  # ✅ Store email in session
+            print(" Login successful!")
             return redirect(url_for('main'))
         else:
-            print("❌ Invalid login credentials.")
+            print(" Invalid login credentials.")
             flash("Invalid email or password")
             return redirect(url_for('login'))
 
@@ -59,12 +60,14 @@ def register():
 
 @app.route('/unsubscribe', methods=['GET', 'POST'])
 def unsubscribe():
+    if 'user_name' not in session or 'email' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
-        email = request.form['email']
+        email = session['email']  # Get from session
         song = request.form['song']
 
         url = "https://m0uoz68yl6.execute-api.us-east-1.amazonaws.com/dev/unsubscribe"
-
         payload = {
             "email": email,
             "song": song
@@ -87,14 +90,18 @@ def unsubscribe():
 
     return render_template('unsubscribe.html')
 
+
+
 @app.route('/subscribe', methods=['GET', 'POST'])
 def subscribe():
+    if 'user_name' not in session or 'email' not in session:
+        return redirect(url_for('login'))
+
     if request.method == 'POST':
-        email = request.form['email']
+        email = session['email']  # use from session
         song = request.form['song']
 
         url = "https://m0uoz68yl6.execute-api.us-east-1.amazonaws.com/dev/subscribe"
-
         payload = {
             "email": email,
             "song": song
@@ -119,13 +126,20 @@ def subscribe():
 
     return render_template('subscribe.html')
 
+
 @app.route('/subscriptions', methods=['GET'])
 def get_subscriptions():
-    email = request.args.get('email')
+    if 'user_name' not in session:
+        flash("Please log in to view your subscriptions.", "warning")
+        return redirect(url_for('login'))
+
+    email = session.get('email')
     if not email:
-        return "Email is required", 400
+        flash("Session expired. Please log in again.", "warning")
+        return redirect(url_for('login'))
 
     url = "https://m0uoz68yl6.execute-api.us-east-1.amazonaws.com/dev/subscriptions"
+    
     try:
         response = requests.get(url, params={"email": email})
         if response.status_code == 200:
@@ -135,8 +149,10 @@ def get_subscriptions():
             flash("Error retrieving subscriptions", "danger")
             return redirect(url_for('main'))
     except requests.RequestException:
-        flash("Unable to connect to subscriptions API", "danger")
+        flash("Unable to connect to the subscription service.", "danger")
         return redirect(url_for('main'))
+
+
 
 @app.route('/main')
 def main():
