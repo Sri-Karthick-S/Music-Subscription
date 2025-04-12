@@ -9,7 +9,7 @@ from utilities.dynamoDb_utils import (
     remove_subscription,
     login_table  
 )
-from utilities.s3_utils import get_presigned_url
+# from utilities.s3_utils import get_presigned_url
 import re
 from botocore.exceptions import ClientError
 import requests
@@ -202,16 +202,12 @@ def main():
     user_email = session['user_email']
     user_name = session.get('user_name', '')
 
-    # Fetch subscriptions
+    # ✅ Get subscriptions from Lambda
     subscriptions = []
     try:
         resp = requests.post(GET_SUBS_API, json={"email": user_email}, timeout=5)
         if resp.status_code == 200:
             subscriptions = resp.json()
-            # Attach image URLs to subscriptions
-            for sub in subscriptions:
-                if 's3_key' in sub and sub['s3_key']:
-                    sub['image_url'] = get_presigned_url(sub['s3_key'])
     except Exception as e:
         print("Subscription API error:", e)
 
@@ -219,7 +215,6 @@ def main():
     query_performed = False
 
     if request.method == 'POST':
-        # Get form values
         criteria = {
             'title': request.form.get('title', '').strip(),
             'artist': request.form.get('artist', '').strip(),
@@ -227,7 +222,6 @@ def main():
             'year': request.form.get('year', '').strip()
         }
 
-        # If all fields empty
         if not any(criteria.values()):
             flash("⚠️ Enter at least one value for Query", "query-warning")
             return render_template('main.html',
@@ -236,9 +230,6 @@ def main():
                                    results=[],
                                    query_performed=False)
 
-        session['last_search'] = criteria
-
-        # Perform search
         try:
             res = requests.post(SEARCH_API, json=criteria, timeout=5)
             if res.status_code == 200:
@@ -247,19 +238,7 @@ def main():
         except Exception as e:
             print("Search API error:", e)
 
-    elif 'last_search' in session:
-        try:
-            res = requests.post(SEARCH_API, json=session['last_search'], timeout=5)
-            if res.status_code == 200:
-                results = res.json()
-                query_performed = True
-        except Exception as e:
-            print("Search API error:", e)
-
-    # Attach images and mark subscription status
     for res in results:
-        if 's3_key' in res and res['s3_key']:
-            res['image_url'] = get_presigned_url(res['s3_key'])
         res['subscribed'] = any(sub['title_album'] == res.get('title_album') for sub in subscriptions)
 
     return render_template('main.html',
@@ -267,6 +246,7 @@ def main():
                            subscriptions=subscriptions,
                            results=results,
                            query_performed=query_performed)
+
 
 
 # @app.route('/main', methods=['GET', 'POST'])

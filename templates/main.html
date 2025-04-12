@@ -9,19 +9,19 @@
       <p class="brand-subtitle">Where music meets your vibe 🎶</p>
     </div>
     <div class="user-area">
-      Welcome, 👋 <span class="user-name">
-        <strong>{{ user_name }}</strong>
-      </span>
+      Welcome, 👋 <span class="user-name"><strong>{{ user_name }}</strong></span>
       <a href="{{ url_for('logout') }}" class="logout">Logout</a>
     </div>
   </header>
-  <!-- MAIN WRAPPER -->
+
+  <!-- MAIN CONTENT -->
   <div class="main-content">
-    <!-- LEFT: SUBSCRIPTIONS AREA -->
+
+    <!-- LEFT: SUBSCRIPTIONS -->
     <section class="subscription-section">
       <h2 class="subscription-title">Your Subscriptions</h2>
       <div class="subscription-scrollable">
-        {% if subscriptions and subscriptions|length > 0 %}
+        {% if subscriptions %}
         <div class="subscription-list">
           {% for sub in subscriptions %}
           <div class="music-card">
@@ -32,7 +32,7 @@
               <p><strong>Year:</strong> {{ sub.year }}</p>
             </div>
             <img src="{{ sub.image_url }}" class="artist-image" alt="Artist Image">
-            <form action="{{ url_for('remove_subscription_route') }}" method="post">
+            <form method="post" action="{{ url_for('remove_subscription_route') }}">
               <input type="hidden" name="title_album" value="{{ sub.title_album }}">
               <button class="remove-btn">Remove</button>
             </form>
@@ -45,11 +45,10 @@
       </div>
     </section>
 
-    <!-- RIGHT: SEARCH + RESULTS -->
+    <!-- RIGHT: SEARCH & QUERY -->
     <section class="query-section">
       <h2 class="subscription-title">Find Music</h2>
 
-      <!-- SEARCH FORM -->
       <form class="query-form" method="POST" action="{{ url_for('main') }}">
         <div class="form-grid">
           <input type="text" name="title" placeholder="Title">
@@ -60,9 +59,8 @@
         <button type="submit" class="query-btn">Query</button>
       </form>
 
-      <!-- QUERY RESULTS -->
       <div class="query-results">
-        {% if results and results|length > 0 %}
+        {% if results %}
         <div class="results-list">
           {% for res in results %}
           <div class="music-card horizontal-card">
@@ -71,6 +69,7 @@
               <p><strong>Artist:</strong> {{ res.artist }}</p>
               <p><strong>Album:</strong> {{ res.album }}</p>
               <p><strong>Year:</strong> {{ res.year }}</p>
+
               {% if not res.subscribed %}
               <form action="{{ url_for('subscribe') }}" method="post">
                 <input type="hidden" name="title_album" value="{{ res.title_album }}">
@@ -79,29 +78,30 @@
                 <input type="hidden" name="album" value="{{ res.album }}">
                 <input type="hidden" name="year" value="{{ res.year }}">
                 <input type="hidden" name="s3_key" value="{{ res.s3_key }}">
-                <button type="submit" class="subscribe-btn">Subscribe</button>
+                <button class="subscribe-btn">Subscribe</button>
               </form>
               {% else %}
               <p class="already-subscribed-label">Already subscribed</p>
               {% endif %}
             </div>
-            <img src="{{ res.image_url }}" alt="Artist Image" class="artist-image horizontal-img">
+            <img src="{{ res.image_url }}" class="artist-image horizontal-img" alt="Result Image">
           </div>
           {% endfor %}
         </div>
         {% elif query_performed %}
         <div class="no-result">No results. Try again.</div>
         {% endif %}
+
         {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            <div class="flash-container">
-              {% for category, message in messages %}
-                {% if category.startswith('query') %}
-                <div class="flash flash-{{ category.split('-')[1] }}">{{ message }}</div>
-                {% endif %}
-              {% endfor %}
-            </div>
-          {% endif %}
+        {% if messages %}
+        <div class="flash-container">
+          {% for category, message in messages %}
+            {% if category.startswith('query') %}
+            <div class="flash flash-{{ category.split('-')[1] }}">{{ message }}</div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        {% endif %}
         {% endwith %}
       </div>
     </section>

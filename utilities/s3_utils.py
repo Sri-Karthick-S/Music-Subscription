@@ -7,7 +7,7 @@ S3_BUCKET = 'artistimages-rmit-assignment'
 # Initialize S3 client (adjust region if necessary)
 s3_client = boto3.client('s3', region_name='us-east-1')
 
-def get_presigned_url(s3_key, expiration=3600):
+def get_presigned1_url(s3_key, expiration=3600):
     """
     Generate a pre-signed URL for the S3 object identified by s3_key.
     :param s3_key: The object key in the S3 bucket.
