@@ -14,7 +14,7 @@ class MusicTable:
             region_name='us-east-1',
         )
         self.table = None
-        self.newly_created = False  # <-- flag to track table creation
+        self.newly_created = False  # Flag to indicate if the table was created
 
     def create_table(self):
         try:
@@ -22,7 +22,7 @@ class MusicTable:
             existing_tables = self.dynamodb.meta.client.list_tables()['TableNames']
             if self.table_name in existing_tables:
                 self.table = self.dynamodb.Table(self.table_name)
-                logger.info("ℹ️ Table '%s' already exists. Skipping creation.", self.table_name)
+                logger.info("Table '%s' already exists. Skipping creation.", self.table_name)
                 self.newly_created = False
                 return self.table
 
@@ -44,12 +44,12 @@ class MusicTable:
             )
 
             self.table.wait_until_exists()
-            logger.info("✅ Table '%s' created successfully.", self.table_name)
+            logger.info(" Table '%s' created successfully.", self.table_name)
             self.newly_created = True
 
         except ClientError as err:
             logger.error(
-                "❌ Error: Couldn't create table %s. %s: %s",
+                " Error: Couldn't create table %s. %s: %s",
                 self.table_name,
                 err.response["Error"]["Code"],
                 err.response["Error"]["Message"]
@@ -64,4 +64,4 @@ if __name__ == '__main__':
 
     if manager.newly_created:
         # Optionally insert music records here
-        logger.info("🚀 Ready to populate the 'music' table with songs.")
+        logger.info(" Ready to populate the 'music' table with songs.")

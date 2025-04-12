@@ -17,23 +17,22 @@ class S3ImageUploader:
     def ensure_bucket_exists(self):
         try:
             self.s3_client.head_bucket(Bucket=self.bucket_name)
-            logger.info(f"🪣 Bucket '{self.bucket_name}' already exists.")
+            logger.info(f" Bucket '{self.bucket_name}' already exists.")
         except ClientError as e:
             error_code = e.response['Error']['Code']
             if error_code == '404':
                 logger.info(f"Creating bucket: {self.bucket_name}")
-                # Create bucket (no LocationConstraint for us-east-1)
                 self.s3_client.create_bucket(Bucket=self.bucket_name)
             else:
-                logger.error("❌ Error checking or creating bucket: %s", e)
+                logger.error(" Error checking or creating bucket: %s", e)
                 raise
 
     def upload_image(self, image_data, key):
         try:
             self.s3_client.put_object(Bucket=self.bucket_name, Key=key, Body=image_data)
-            logger.info(f"✅ Uploaded image to {self.bucket_name}/{key}")
+            logger.info(f" Uploaded image to {self.bucket_name}/{key}")
         except ClientError as err:
-            logger.error("❌ Error uploading image: %s", err)
+            logger.error(" Error uploading image: %s", err)
             raise
 
 class MusicDataLoader:
@@ -44,28 +43,27 @@ class MusicDataLoader:
         try:
             with open(json_file, 'r') as file:
                 data = json.load(file)
-                logger.info("📄 JSON file loaded successfully.")
+                logger.info(" JSON file loaded successfully.")
                 return data['songs']
         except Exception as e:
-            logger.error("❌ Error loading JSON file: %s", e)
+            logger.error(" Error loading JSON file: %s", e)
             raise
 
     def download_and_upload_images(self, song_data):
         for song in song_data:
             img_url = song.get('img_url')
             if not img_url:
-                logger.warning("⚠️ No image URL for song: %s", song.get('title', 'Unknown'))
+                logger.warning(" No image URL for song: %s", song.get('title', 'Unknown'))
                 continue
-
             try:
                 response = requests.get(img_url)
                 response.raise_for_status()
 
                 key = f"{song['artist'].replace(' ', '_')}/{song['title'].replace(' ', '_')}.jpg"
                 self.s3_uploader.upload_image(response.content, key)
-                logger.info(f"📦 Processed image for {song['title']} by {song['artist']}")
+                logger.info(f" Processed image for {song['title']} by {song['artist']}")
             except Exception as e:
-                logger.error("❌ Error processing image for %s: %s", song.get('title', 'Unknown'), e)
+                logger.error(" Error processing image for %s: %s", song.get('title', 'Unknown'), e)
 
 if __name__ == '__main__':
     bucket_name = 'artistimages-rmit-assignment'

@@ -12,7 +12,7 @@ class MusicDataLoader:
         self.dynamodb = boto3.resource(
             'dynamodb',
             region_name='us-east-1',
-            #endpoint_url='http://localhost:8000'  # DynamoDB Local
+           
         )
         self.table_name = 'music'
         self.table = self.dynamodb.Table(self.table_name)
@@ -21,8 +21,8 @@ class MusicDataLoader:
         try:
             with open(json_file, 'r') as file:
                 data = json.load(file)
-                logger.info("✅ Data loaded from JSON file successfully.")
-                return data['songs']  # 👈 Access the nested array
+                logger.info(" Data loaded from JSON file successfully.")
+                return data['songs']  #  Access the nested array
         except Exception as e:
             logger.error("Error loading JSON file: %s", e)
             raise

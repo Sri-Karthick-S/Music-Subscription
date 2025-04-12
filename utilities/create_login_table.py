@@ -25,7 +25,7 @@ class LoginTable:
             existing_tables = self.dynamodb.meta.client.list_tables()['TableNames']
             if self.table_name in existing_tables:
                 self.table = self.dynamodb.Table(self.table_name)
-                logger.info("ℹ️ Table '%s' already exists. Skipping creation and population.", self.table_name)
+                logger.info(" Table '%s' already exists. Skipping creation and population.", self.table_name)
                 self.newly_created = False
                 return self.table
 
@@ -72,7 +72,7 @@ class LoginTable:
                 logger.info(f"👤 Inserted user: {email}")
             except ClientError as err:
                 logger.error(
-                    "❌ Couldn't insert user %s. Error: %s",
+                    " Couldn't insert user %s. Error: %s",
                     email,
                     err.response["Error"]["Message"]
                 )
@@ -86,6 +86,6 @@ if __name__ == '__main__':
 
     manager.create_table()
 
-    #  Only populate if table was just created
+    # Populate the table with users if it was newly created
     if manager.newly_created:
         manager.populate_users()

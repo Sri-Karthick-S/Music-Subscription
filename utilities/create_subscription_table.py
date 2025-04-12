@@ -13,9 +13,8 @@ def create_subscription_table():
 
     existing_tables = dynamodb.meta.client.list_tables()['TableNames']
     if table_name in existing_tables:
-        logger.info(f"🪣 Table '{table_name}' already exists.")
+        logger.info(f" Table '{table_name}' already exists.")
         return
-
     try:
         table = dynamodb.create_table(
             TableName=table_name,
@@ -30,9 +29,9 @@ def create_subscription_table():
             ProvisionedThroughput={'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5}
         )
         table.wait_until_exists()
-        logger.info(f"✅ Created subscription table: {table_name}")
+        logger.info(f" Created subscription table: {table_name}")
     except ClientError as err:
-        logger.error(f"❌ Failed to create table: {err.response['Error']['Message']}")
+        logger.error(f" Failed to create table: {err.response['Error']['Message']}")
         raise
 
 if __name__ == '__main__':
