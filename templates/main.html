@@ -50,14 +50,14 @@
       <h2 class="subscription-title">Find Music</h2>
 
       <!-- SEARCH FORM -->
-      <form class="query-form" method="post" action="{{ url_for('main') }}">
+      <form class="query-form" method="POST" action="{{ url_for('main') }}">
         <div class="form-grid">
-          <input type="text" name="title" placeholder="Title " value="{{ session['last_search']['title'] if session.get('last_search') else '' }}">
-          <input type="text" name="year" placeholder="Year" value="{{ session['last_search']['year'] if session.get('last_search') else '' }}">
-          <input type="text" name="album" placeholder="Album" value="{{ session['last_search']['album'] if session.get('last_search') else '' }}">
-          <input type="text" name="artist" placeholder="Artist" value="{{ session['last_search']['artist'] if session.get('last_search') else '' }}">
+          <input type="text" name="title" placeholder="Title">
+          <input type="text" name="year" placeholder="Year">
+          <input type="text" name="album" placeholder="Album">
+          <input type="text" name="artist" placeholder="Artist">
         </div>
-        <button type="submit" class="query-btn">Search</button>
+        <button type="submit" class="query-btn">Query</button>
       </form>
 
       <!-- QUERY RESULTS -->
@@ -92,6 +92,17 @@
         {% elif query_performed %}
         <div class="no-result">No results. Try again.</div>
         {% endif %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-container">
+              {% for category, message in messages %}
+                {% if category.startswith('query') %}
+                <div class="flash flash-{{ category.split('-')[1] }}">{{ message }}</div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
       </div>
     </section>
   </div>

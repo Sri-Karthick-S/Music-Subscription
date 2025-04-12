@@ -26,7 +26,7 @@ def home():
 login_API= "https://wir5etx69g.execute-api.us-east-1.amazonaws.com/dev_user_login"
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    get_flashed_messages()
+    # get_flashed_messages()
 
     if request.method == 'POST':
         email = request.form.get('email', '').strip()
@@ -193,6 +193,7 @@ def register():
 SEARCH_API = "https://0433e01uuc.execute-api.us-east-1.amazonaws.com/dev_main/search"
 GET_SUBS_API = "https://0433e01uuc.execute-api.us-east-1.amazonaws.com/dev_main/subscriptions"
 
+
 @app.route('/main', methods=['GET', 'POST'])
 def main():
     if 'user_email' not in session:
@@ -201,13 +202,13 @@ def main():
     user_email = session['user_email']
     user_name = session.get('user_name', '')
 
-    # 1️⃣ Get subscriptions from Lambda
+    # Fetch subscriptions
     subscriptions = []
     try:
         resp = requests.post(GET_SUBS_API, json={"email": user_email}, timeout=5)
         if resp.status_code == 200:
             subscriptions = resp.json()
-            # Add image URLs for subscriptions
+            # Attach image URLs to subscriptions
             for sub in subscriptions:
                 if 's3_key' in sub and sub['s3_key']:
                     sub['image_url'] = get_presigned_url(sub['s3_key'])
@@ -217,15 +218,27 @@ def main():
     results = []
     query_performed = False
 
-    # 2️⃣ Perform search if POST or reuse last search
     if request.method == 'POST':
+        # Get form values
         criteria = {
-            'title': request.form.get('title', ''),
-            'artist': request.form.get('artist', ''),
-            'album': request.form.get('album', ''),
-            'year': request.form.get('year', '')
+            'title': request.form.get('title', '').strip(),
+            'artist': request.form.get('artist', '').strip(),
+            'album': request.form.get('album', '').strip(),
+            'year': request.form.get('year', '').strip()
         }
+
+        # If all fields empty
+        if not any(criteria.values()):
+            flash("⚠️ Enter at least one value for Query", "query-warning")
+            return render_template('main.html',
+                                   user_name=user_name,
+                                   subscriptions=subscriptions,
+                                   results=[],
+                                   query_performed=False)
+
         session['last_search'] = criteria
+
+        # Perform search
         try:
             res = requests.post(SEARCH_API, json=criteria, timeout=5)
             if res.status_code == 200:
@@ -233,6 +246,7 @@ def main():
                 query_performed = True
         except Exception as e:
             print("Search API error:", e)
+
     elif 'last_search' in session:
         try:
             res = requests.post(SEARCH_API, json=session['last_search'], timeout=5)
@@ -242,20 +256,17 @@ def main():
         except Exception as e:
             print("Search API error:", e)
 
-    # 3️⃣ Add image URLs and mark subscribed results
+    # Attach images and mark subscription status
     for res in results:
         if 's3_key' in res and res['s3_key']:
             res['image_url'] = get_presigned_url(res['s3_key'])
-
-        title_album = res.get('title_album')
-        res['subscribed'] = any(sub['title_album'] == title_album for sub in subscriptions)
+        res['subscribed'] = any(sub['title_album'] == res.get('title_album') for sub in subscriptions)
 
     return render_template('main.html',
                            user_name=user_name,
                            subscriptions=subscriptions,
                            results=results,
                            query_performed=query_performed)
-
 
 
 # @app.route('/main', methods=['GET', 'POST'])
