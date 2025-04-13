@@ -162,14 +162,6 @@ DynamoDB is used to store and manage user, music, and subscription data.
 
 ![DynamoDb](DynamoDb.png)
 
-### Setup:
-Tables are created using Python scripts on the EC2 instance:
-```bash
-python utilities/create_login_table.py
-python utilities/create_music_table.py
-python utilities/create_subscription_table.py
-```
-
 ### Table Keys:
 - **Login Table**: Partition Key → `email`
 - **Music Table**: Partition Key → `title_album`
@@ -185,11 +177,6 @@ S3 is used to store artist images that appear on the main dashboard.
 
 ![S3](S3.png)
 
-### Setup:
-Images are uploaded to S3 using:
-```bash
-python utilities/load_artist_images.py
-```
 ---
 
 ## 🔁 Lambda & API Gateway (Cloud Deployment)
