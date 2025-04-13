@@ -6,13 +6,16 @@ A cloud-based music app that allows users to register, log in, search for music,
 
 The application provides the following UI pages:
 - `login.html` – Users can log in using registered credentials
-- `register.html` – New users can sign up
-- `main.html` – Main dashboard to search and subscribe to music
 
-Snapshots:
-- `loginpage.png`
-- `registerpage.png`
-- `mainpage.png`
+`loginpage.png`
+
+- `register.html` – New users can sign up
+
+`registerpage.png`
+
+- `main.html` – Main dashboard to search and subscribe to music
+  
+`mainpage.png`
 
 ---
 
@@ -226,21 +229,6 @@ Each Lambda is connected to an HTTP API via API Gateway:
 
 ---
 
-## 📁 Project Structure
-
-```
-.
-├── app.py
-├── templates/
-├── static/
-├── utilities/
-├── wsgi.py
-├── README.md
-└── requirements.txt
-```
-
----
-
 ## 🐛 Troubleshooting
 
 - Check Apache logs:
@@ -258,13 +246,3 @@ sudo systemctl reload apache2
 ```
 
 ---
-
-## 📜 License
-
-This project is for academic/demo purposes. You may adapt or extend it as needed.
-
----
-
-## 🙌 Acknowledgements
-
-Thanks to RMIT’s Cloud Computing course and contributors.
