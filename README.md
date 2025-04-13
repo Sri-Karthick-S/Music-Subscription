@@ -5,12 +5,9 @@ A cloud-based music app that allows users to register, log in, search for music,
 ##  User Interface
 
 The application provides the following UI pages:
-- `login.html` – Users can log in using registered credentials
+- `auth.html` – Users can log in using registered credentials and new users can sign up
 
 ![Login Page](loginpage.png)
-
-- `register.html` – New users can sign up
-
 ![Register Page](registerpage.png)
 
 - `main.html` – Main dashboard to search and subscribe to music
@@ -42,7 +39,7 @@ The application provides the following UI pages:
 
 ---
 
-## 🛠️ Local Setup Instructions
+##  Local Setup Instructions
 
 1. **Clone the repository**
 ```bash
