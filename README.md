@@ -89,6 +89,8 @@ Open `http://127.0.0.1:5000/` in your browser.
 
 ## ☁️ Cloud Deployment on EC2 (Apache + WSGI)
 
+![EC2](ec2.png)
+
 ### Step 1: Launch EC2 Instance
 - Use Ubuntu 20.04 or 22.04
 - Configure Inbound Rules:
@@ -158,6 +160,8 @@ sudo systemctl restart apache2
 
 DynamoDB is used to store and manage user, music, and subscription data.
 
+![DynamoDb](DynamoDb.png)
+
 ### Setup:
 Tables are created using Python scripts on the EC2 instance:
 ```bash
@@ -178,6 +182,8 @@ These tables are automatically provisioned when the scripts are executed and are
 ## 🖼️ S3 Bucket (Cloud Deployment)
 
 S3 is used to store artist images that appear on the main dashboard.
+
+![S3](S3.png)
 
 ### Setup:
 Images are uploaded to S3 using:
