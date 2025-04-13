@@ -219,19 +219,10 @@ Deployed separately using the AWS Lambda console:
 - `subscribeSongHandler`
 - `removeSubscriptionHandler`
 
-Each script (available in `AWS and Apache files/`) performs operations like authentication, music search, and subscription management.
-
 ### API Gateway:
 Each Lambda is connected to an HTTP API via API Gateway:
 - Allows secure and scalable public API endpoints
 - API endpoints can be directly called from the frontend or integrated with your app backend
-
----
-
-## 🖼️ Snapshots & Architecture
-
-- UI Screens: `loginpage.png`, `registerpage.png`, `mainpage.png`
-- Cloud Diagrams: `S3 bucket.png`, `DynomoDb.png`, `API gateway.png`, `files in EC2 instance.png`
 
 ---
 
