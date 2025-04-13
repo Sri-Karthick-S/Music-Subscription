@@ -1,3 +1,7 @@
+# This module provides utility functions to interact with DynamoDB tables for user login, music search, and subscriptions.
+# It includes functions to check login credentials, register users, search for music based on criteria,
+
+
 import boto3
 from boto3.dynamodb.conditions import Key, Attr
 from botocore.exceptions import ClientError

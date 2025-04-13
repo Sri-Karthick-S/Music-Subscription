@@ -1,3 +1,6 @@
+# This script creates a DynamoDB table named 'music' with a composite primary key.
+# It uses the artist as the partition key and a composite sort key combining title and album.   
+
 import boto3
 import logging
 from botocore.exceptions import ClientError

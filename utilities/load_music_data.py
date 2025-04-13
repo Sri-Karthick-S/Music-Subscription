@@ -1,3 +1,7 @@
+# This script loads music data from a JSON file into a DynamoDB music table.
+# It uses a composite sort key for the title and album, and computes an S3 key for each song.
+# It also handles errors during the loading process and logs the operations.
+
 import boto3
 import json
 import logging

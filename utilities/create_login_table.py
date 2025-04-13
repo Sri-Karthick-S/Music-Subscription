@@ -1,3 +1,6 @@
+# This script creates a DynamoDB table named 'login' if it doesn't already exist.
+# It uses the email as the partition key and populates it with user data.
+
 import boto3
 import logging
 from botocore.exceptions import ClientError

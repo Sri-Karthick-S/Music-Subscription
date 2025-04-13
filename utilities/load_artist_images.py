@@ -1,3 +1,7 @@
+# This script downloads images from a JSON file and uploads them to an S3 bucket.
+# It uses the requests library to download images and the boto3 library to interact with S3.
+# It also handles errors during the upload process and logs the operations.
+
 import boto3
 import json
 import logging

@@ -1,3 +1,6 @@
+# This module provides utility functions for generating presigned URLs for S3 objects.
+# # It includes a function to generate a presigned URL for downloading an image from S3.
+
 import boto3
 from botocore.exceptions import ClientError
 

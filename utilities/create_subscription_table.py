@@ -1,3 +1,5 @@
+# This script creates a DynamoDB table named 'subscription' with the following attributes:
+
 # create_subscription_table.py
 import boto3
 import logging

@@ -1,3 +1,8 @@
+# this is the main entry point for the Flask application
+# this file contains the main routes and logic for the application
+# it handles user authentication, registration, and subscription management
+# it also handles the main page where users can search for music and manage their subscriptions
+
 # ------------------------------------------------------------
 # IMPORTS
 # ------------------------------------------------------------
