@@ -190,20 +190,6 @@ Images are uploaded to S3 using:
 ```bash
 python utilities/load_artist_images.py
 ```
-
-### Bucket Policy:
-To publicly serve images:
-```json
-{
-  "Effect": "Allow",
-  "Principal": "*",
-  "Action": "s3:GetObject",
-  "Resource": "arn:aws:s3:::your-bucket-name/*"
-}
-```
-
-This enables access to image URLs directly from the frontend.
-
 ---
 
 ## 🔁 Lambda & API Gateway (Cloud Deployment)
