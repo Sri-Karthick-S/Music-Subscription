@@ -164,7 +164,7 @@ DynamoDB is used to store and manage user, music, and subscription data.
 
 ### Table Keys:
 - **Login Table**: Partition Key → `email`
-- **Music Table**: Partition Key → `title_album`
+- **Music Table**: Partition Key → `artist`, Sort Key → `title_album`
 - **Subscription Table**: Partition Key → `email`, Sort Key → `title_album`
 
 These tables are automatically provisioned when the scripts are executed and are used by Lambda functions for serverless access.
@@ -173,7 +173,13 @@ These tables are automatically provisioned when the scripts are executed and are
 
 ## 🖼️ S3 Bucket (Cloud Deployment)
 
-S3 is used to store artist images that appear on the main dashboard.
+The application uses an Amazon S3 bucket to store artist images that are displayed on the main dashboard. However, access to these images is **restricted** — only authenticated users are allowed to view them.
+
+### Why Pre-Signed URLs?
+
+Instead of making the S3 bucket public, this project uses **pre-signed URLs** to temporarily grant access to private objects in S3. This ensures:
+- 🔐 **Secure Access** – Only logged-in users can view images.
+- ⏳ **Time-Limited Access** – URLs expire after a set duration, preventing long-term exposure.
 
 ![S3](S3.png)
 
