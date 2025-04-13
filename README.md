@@ -35,7 +35,7 @@ The application provides the following UI pages:
 
 - 🔐 User Registration and Login
 - 🎧 Music Search and Subscription
-- ☁️ Music & Image Storage on S3
+- ☁️ Artist Image Storage on S3
 - 🗃 Data managed via DynamoDB
 - ⚙️ Lambda functions exposed via API Gateway
 - 🌐 Deployed on EC2 with Apache and WSGI
