@@ -181,6 +181,12 @@ Instead of making the S3 bucket public, this project uses **pre-signed URLs** to
 - 🔐 **Secure Access** – Only logged-in users can view images.
 - ⏳ **Time-Limited Access** – URLs expire after a set duration, preventing long-term exposure.
 
+### How it was used in the project?
+- A dedicated S3 bucket was created to store all artist or album images.
+- During the process of populating the music table in DynamoDB, we generated pre-signed PUT URLs to upload images securely to S3 using Python (Boto3).
+- The image file paths (S3 URLs) were then stored in the image_url field of each corresponding song item in the DynamoDB table.
+- These image URLs were later used in the frontend to dynamically display artist or album artwork.
+
 ![S3](S3.png)
 
 ---
