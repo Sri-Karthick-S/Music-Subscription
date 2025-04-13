@@ -7,15 +7,15 @@ A cloud-based music app that allows users to register, log in, search for music,
 The application provides the following UI pages:
 - `login.html` – Users can log in using registered credentials
 
-`loginpage.png`
+![Login Page](loginpage.png)
 
 - `register.html` – New users can sign up
 
-`registerpage.png`
+![Register Page](registerpage.png)
 
 - `main.html` – Main dashboard to search and subscribe to music
   
-`mainpage.png`
+![Main Page](mainpage.png)
 
 ---
 
