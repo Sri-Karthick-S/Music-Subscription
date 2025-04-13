@@ -46,7 +46,7 @@ The application provides the following UI pages:
 
 1. **Clone the repository**
 ```bash
-git clone <repo-url>
+git clone https://github.com/Sri-Karthick-S/Music-Subscription/tree/reyaz11
 cd Music-Subscription
 ```
 
