@@ -2,7 +2,8 @@
 Web based music subscription application using AWS
 
 # Folder Structure
-![alt text](image.png)
+![alt text]![image](https://github.com/user-attachments/assets/24b42d86-d8e3-49d5-8d1c-b3c61d283863)
+
 
 # Login Page Design
 ![alt text]<img width="959" alt="image" src="https://github.com/user-attachments/assets/56336c04-1698-4608-8dd0-7d57c2b9caee" />
