@@ -147,7 +147,7 @@ def register():
 # - Uses GET_SUBS_API and SEARCH_API
 # ------------------------------------------------------------
 SEARCH_API = "https://0433e01uuc.execute-api.us-east-1.amazonaws.com/dev_main/search"
-GET_SUBS_API = "https://0433e01uuc.execute-api.us-east-1.amazonaws.com/dev_main/subscriptions"
+GET_SUBS_API = "https://0433e01uuc.execute-api.us-east-1.amazonaws.com/dev_main/subscriptionss"
 
 
 @app.route('/main', methods=['GET', 'POST'])
