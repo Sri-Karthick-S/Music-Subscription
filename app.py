@@ -15,7 +15,7 @@ import requests
 # FLASK APP SETUP
 # ------------------------------------------------------------
 app = Flask(__name__)
-app.secret_key = 'your-secret-key'  
+app.secret_key = 'yoursecretkey77009900'  
 # ------------------------------------------------------------
 # ROUTE: Redirect base route '/' to login page
 # ------------------------------------------------------------
